@@ -12,45 +12,54 @@
   .layout-main{overflow:auto}
 </style>
 <style>
-  /* HL 主题：绿色（仅作用于侧边栏，避免影响表格/内容区） */
+  /* ===== HL 主题：浅调翡翠绿 ===== */
   :root{
-    --el-color-primary:#10b981;
-    --el-color-primary-light-3:#58c9a3;
-    --el-color-primary-light-5:#88dcc0;
-    --el-color-primary-light-7:#b7ecdc;
-    --el-color-primary-light-8:#cff3e9;
-    --el-color-primary-light-9:#e7f9f4;
-    --el-color-primary-dark-2:#0d9467;
+    --el-color-primary:#4CBE97;
+    --el-color-primary-light-3:#74CFAF;
+    --el-color-primary-light-5:#9CE0C7;
+    --el-color-primary-light-7:#C3EFDF;
+    --el-color-primary-light-8:#D5F4E9;
+    --el-color-primary-light-9:#EAFBF4;
+    --el-color-primary-dark-2:#3E9C7C;
   }
   .layout-sidebar,.aside-area,.sidebar-content,
   .layout-sidebar .el-menu,
   .layout-sidebar .el-scrollbar,
   .layout-sidebar .el-scrollbar__wrap,
   .layout-sidebar .el-scrollbar__view,
-  .layout-sidebar .sidebar-menu{
-    background-color:#06493a!important;background-image:none!important;
-  }
-  .layout-sidebar .el-sub-menu__title,.layout-sidebar .el-menu-item{
-    background-color:transparent!important;
-  }
+  .layout-sidebar .sidebar-menu{background-color:#164538!important;background-image:none!important}
+  .layout-sidebar .el-sub-menu__title,.layout-sidebar .el-menu-item{background-color:transparent!important}
   .layout-sidebar .el-menu-item.is-active,
-  .layout-sidebar .el-menu-item.is-active *{
-    background-color:#0e9f6e!important;color:#fff!important;
-  }
+  .layout-sidebar .el-menu-item.is-active *{background-color:#2E9C79!important;color:#fff!important}
   .layout-sidebar .el-sub-menu__title:hover,
-  .layout-sidebar .el-menu-item:hover{
-    background-color:rgba(255,255,255,.08)!important;
-  }
-  .sidebar-collapse,.sidebar-collapse *{background-color:transparent!important;border-color:transparent!important;box-shadow:none!important;}
-  .sidebar-collapse .el-button,.sidebar-collapse .collapse-btn{background-color:transparent!important;border-color:transparent!important;}
-  .sidebar-collapse .collapse-btn{color:#8fe0c1!important;}
-  .welcome-section{background:linear-gradient(100deg,#e6f8f1,#f2fbf7)!important;border-color:#cbe9dc!important;}
-  .quick-access .el-icon,.quick-access svg,.quick-access i{color:#0e9f6e!important;}
-  .el-button--primary{background-color:#10b981!important;border-color:#10b981!important;}
-  .el-button--primary:hover{background-color:#34c793!important;border-color:#34c793!important;}
-  .el-pager li.is-active{background-color:#10b981!important;}
-  .el-tag--primary{background-color:#e7f9f4!important;border-color:#b7ecdc!important;color:#0d9467!important;}
-  .el-link.el-link--primary{color:#10b981!important;}
+  .layout-sidebar .el-menu-item:hover{background-color:rgba(255,255,255,.09)!important}
+  .sidebar-collapse,.sidebar-collapse *{background-color:transparent!important;border-color:transparent!important;box-shadow:none!important}
+  .sidebar-collapse .el-button{background-color:transparent!important;border-color:transparent!important}
+  .sidebar-collapse .collapse-btn{color:#9ADFC8!important}
+  .welcome-section{background:linear-gradient(100deg,#EAFBF4,#F6FBF7)!important;border-color:#CFEDE1!important}
+  .quick-access .el-icon,.quick-access svg{color:#4CBE97!important}
+</style>
+<style>
+  /* 筛选区：等宽控件，标签与输入框对齐 */
+  .search-area{height:auto!important;min-height:60px;padding:14px 16px!important;display:flex;align-items:center;box-sizing:border-box}
+  .search-row{display:flex;align-items:center;gap:12px;width:100%;flex-wrap:wrap}
+  .search{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;flex:1 1 auto;min-width:0}
+  .search-item{display:flex;align-items:center;gap:8px}
+  .search-item-label{white-space:nowrap;color:#5C6B7A;font-size:13px;line-height:1}
+  .search-item .search-input,.search-item .el-input,.search-item .el-select{width:176px!important}
+  .search-item .el-date-editor,.search-item .el-date-editor--daterange{width:240px!important}
+  .search-area .el-button{height:32px}
+  .search-area .el-button+.el-button{margin-left:8px}
+
+  /* 隐藏原位“操作”列（它 sticky 在右边缘，会压到别的列上）*/
+  .el-table .el-table-fixed-column--right{display:none!important}
+
+  /* 末列改造为操作按钮 */
+  .el-table td.op-cell .cell{font-size:0!important}
+  .el-table td.op-cell .cell::before{content:"编辑";font-size:12.5px;color:var(--el-color-primary);margin-right:16px;cursor:pointer;font-weight:500}
+  .el-table td.op-cell .cell::after{content:"删除";font-size:12.5px;color:#E4747A;cursor:pointer;font-weight:500}
+  .el-table tbody tr:hover td.op-cell .cell::before,
+  .el-table tbody tr:hover td.op-cell .cell::after{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -68,7 +77,6 @@
   function pad(n){ return (n < 10 ? '0' : '') + n; }
   function val(label, r){
     var L = label || '';
-    if (/操作/.test(L)) return '编辑　删除';
     if (/时间|日期/.test(L)) return '2026-03-' + pad(10 + r) + ' ' + pad(8 + r) + ':' + pad(15 + r * 4);
     if (/状态|结果|判定|合格/.test(L)) return ['已完成','进行中','待处理'][r % 3];
     if (/编号|编码|代码|单号|Key/.test(L)) return 'WO-2026-' + (100 + r);
@@ -81,12 +89,23 @@
   }
   function fixAction(root){
     root.querySelectorAll('.el-table').forEach(function(t){
-      var hasOp = [].slice.call(t.querySelectorAll('th')).some(function(th){ return /操作/.test(th.textContent); });
+      var ths = [].slice.call(t.querySelectorAll('.el-table__header-wrapper th'));
+      var wrap = t.querySelector('.el-table__body-wrapper');
+      if (!ths.length || !wrap) return;
+      var wr = wrap.getBoundingClientRect();
+      var idx = -1;
+      ths.forEach(function(th, i){
+        var r = th.getBoundingClientRect();
+        if (r.width > 0 && r.left < wr.right - 8) idx = i;
+      });
+      if (idx < 0) return;
+      var head = ths[idx];
+      var hasOp = ths.some(function(th){ return /操作/.test(th.textContent); });
       if (!hasOp) return;
+      head.innerHTML = '<div class="cell">操作</div>';
       [].forEach.call(t.querySelectorAll('.el-table__body-wrapper tbody tr'), function(tr){
-        var cells = [].slice.call(tr.children).filter(function(td){ return td.offsetWidth > 0; });
-        var last = cells[cells.length - 1];
-        if (last) last.innerHTML = '<div class="cell">编辑　删除</div>';
+        var td = tr.children[idx];
+        if (td) { td.classList.add('op-cell'); td.innerHTML = '<div class="cell"></div>'; }
       });
     });
   }
@@ -124,7 +143,10 @@
           td.className = 'el-table__cell';
           var d = document.createElement('div');
           d.className = 'cell';
-          if (!c.skip) d.textContent = val(c.l, r);
+          if (!c.skip) {
+            if (/操作/.test(c.l)) d.textContent = '';
+            else d.textContent = val(c.l, r);
+          }
           td.appendChild(d); tr.appendChild(td);
         });
         body.appendChild(tr);
