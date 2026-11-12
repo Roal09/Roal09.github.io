@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!--
   ============================================================
-  项目作品集 · 静态预览站（单文件，可离线打开 / 任意静态托管）
+  项目作品集 · 静态预览站（单文件 + shots/ 截图目录）
   ============================================================
   使用说明：
   1. 修改个人信息：搜索 "YOUR_NAME" 替换为姓名，搜索 "YOUR_TITLE" 替换为岗位。
-  2. 生成二维码：把本页部署后的公网地址，用「草料二维码 / QRCode Monkey」生成动态二维码，
-     贴到简历上即可（动态码日后可改指向，无需重印）。
-  3. 本页不含任何真实数据：数据库密码、内网IP、密钥、真实公司名均已用代号/占位替代。
-     公司代号：DA = 某发动机制造企业 MES，HL = 某商用车零部件企业 MES，HMDP = 开源本地生活项目。
+  2. 上传：把 index.html 和 shots/ 整个文件夹一起上传到 GitHub 仓库根目录。
+  3. 二维码：用部署后的网址生成动态二维码贴简历。
+  4. 脱敏：所有公司名均已替换为代号（DA / HL），密码、内网 IP、密钥均已移除。
+     界面截图为真实系统渲染图，仅做了品牌文字替换。
 -->
 <html lang="zh-CN">
 <head>
@@ -18,17 +18,9 @@
 <title>项目作品集 · Portfolio</title>
 <style>
   :root{
-    --bg:#0b1220;
-    --bg2:#0f1a2e;
-    --panel:#121f36;
-    --panel2:#182841;
-    --line:#243755;
-    --text:#e6edf7;
-    --muted:#8ea0b8;
-    --da:#3b82f6;
-    --hl:#10b981;
-    --hmdp:#8b5cf6;
-    --gold:#f5b942;
+    --bg:#0b1220; --bg2:#0f1a2e; --panel:#121f36; --panel2:#182841;
+    --line:#243755; --text:#e6edf7; --muted:#8ea0b8;
+    --da:#3b82f6; --hl:#10b981; --hmdp:#8b5cf6; --gold:#f5b942;
     --radius:16px;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -36,421 +28,381 @@
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
     background:radial-gradient(1200px 600px at 80% -10%, #16305a 0%, transparent 55%),
-               radial-gradient(900px 500px at -10% 10%, #1a2a4a 0%, transparent 50%),
-               var(--bg);
-    color:var(--text);
-    line-height:1.7;
-    -webkit-font-smoothing:antialiased;
+               radial-gradient(900px 500px at -10% 10%, #1a2a4a 0%, transparent 50%), var(--bg);
+    color:var(--text); line-height:1.7; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   a{color:inherit;text-decoration:none}
   .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 
-  /* ---------- 顶栏 ---------- */
-  header{
-    position:sticky;top:0;z-index:50;
-    backdrop-filter:blur(12px);
-    background:rgba(11,18,32,.72);
-    border-bottom:1px solid var(--line);
-  }
-  .nav{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
+  /* ---------- 顶栏 + 分页标签 ---------- */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(11,18,32,.82);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px;min-width:0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px;white-space:nowrap;flex:none}
   .brand .dot{width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg,var(--da),var(--hmdp))}
-  .nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
-  .nav-links a:hover{color:var(--text)}
-  @media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+  .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1 1 auto;justify-content:flex-start}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    border:1px solid transparent;background:transparent;color:var(--muted);
+    font:inherit;font-size:13.5px;padding:7px 14px;border-radius:9px;cursor:pointer;
+    white-space:nowrap;transition:.18s;display:flex;align-items:center;gap:7px;
+  }
+  .tab:hover{color:var(--text);background:var(--panel)}
+  .tab .tc{font-size:11px;letter-spacing:1.5px;font-weight:800;opacity:.75}
+  .tab.active{color:#fff;background:var(--panel2);border-color:var(--line)}
+  .tab.active .tc{opacity:1;color:var(--accent,var(--da))}
+
+  @media(max-width:560px){
+    .wrap{padding:0 14px}
+    .brand{font-size:14px}
+    .tab{font-size:12.5px;padding:6px 10px}
+  }
 
   /* ---------- Hero ---------- */
-  .hero{padding:64px 0 40px}
-  .hero .tag{
-    display:inline-block;font-size:13px;color:var(--gold);
+  .hero{padding:46px 0 26px}
+  body.on-project .hero{display:none}
+  body.on-project .panel{padding-top:28px}
+  .hero .tag{display:inline-block;font-size:13px;color:var(--gold);
     border:1px solid rgba(245,185,66,.35);background:rgba(245,185,66,.08);
-    padding:4px 12px;border-radius:999px;margin-bottom:18px;
-  }
-  .hero h1{font-size:clamp(28px,5vw,44px);line-height:1.25;font-weight:800}
-  .hero h1 .grad{background:linear-gradient(90deg,var(--da),var(--hmdp),var(--hl));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero p{color:var(--muted);max-width:640px;margin-top:14px;font-size:15px}
-  .hero .meta{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px}
-  .hero .meta span{font-size:13px;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:5px 12px;border-radius:999px}
-  .hero .note{margin-top:22px;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
+    padding:4px 12px;border-radius:999px;margin-bottom:16px}
+  .hero h1{font-size:clamp(23px,4.4vw,40px);line-height:1.25;font-weight:800}
+  .hero h1 .grad{background:linear-gradient(90deg,var(--da),var(--hmdp),var(--hl));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);max-width:660px;margin-top:12px;font-size:14.5px}
+  .hero .meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+  .hero .meta span{font-size:12.5px;color:var(--muted);background:var(--panel);
+    border:1px solid var(--line);padding:4px 11px;border-radius:999px}
+  .hero .note{margin-top:16px;font-size:12.5px;color:var(--muted)}
   .hero .note b{color:var(--gold)}
 
-  /* ---------- 项目卡片 ---------- */
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:34px 0}
+  /* ---------- 面板 ---------- */
+  .panel{display:none;padding-bottom:40px}
+  .panel.active{display:block;animation:fade .32s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---------- 概览卡片 ---------- */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:6px 0 10px}
   @media(max-width:820px){.grid{grid-template-columns:1fr}}
-  .card{
-    position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:22px;transition:transform .2s,border-color .2s;overflow:hidden;
-  }
-  .card:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--radius);padding:20px;cursor:pointer;transition:.2s;overflow:hidden;text-align:left;
+    font:inherit;color:inherit;width:100%}
+  .card:hover{transform:translateY(-3px);border-color:var(--accent)}
   .card::after{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--accent)}
-  .card .code{font-size:12px;letter-spacing:2px;font-weight:700;color:var(--accent)}
-  .card h3{font-size:19px;margin:8px 0 6px}
-  .card .desc{font-size:13.5px;color:var(--muted);min-height:60px}
-  .card .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-  .card .tags i{font-style:normal;font-size:11.5px;color:var(--muted);background:var(--bg2);border:1px solid var(--line);padding:3px 8px;border-radius:6px}
-  .card .go{margin-top:16px;font-size:13px;color:var(--accent);font-weight:600}
+  .card .code{font-size:11.5px;letter-spacing:2px;font-weight:800;color:var(--accent)}
+  .card h3{font-size:18px;margin:7px 0 5px}
+  .card .desc{font-size:13px;color:var(--muted);min-height:58px}
+  .card .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+  .card .tags i{font-style:normal;font-size:11px;color:var(--muted);background:var(--bg2);
+    border:1px solid var(--line);padding:2px 8px;border-radius:6px}
+  .card .go{margin-top:14px;font-size:12.5px;color:var(--accent);font-weight:600}
   .card .go::after{content:" →"}
 
-  /* ---------- 分区标题 ---------- */
-  section.project{padding:44px 0 10px;border-top:1px solid var(--line);margin-top:8px}
-  .p-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  /* ---------- 项目内容 ---------- */
+  .p-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:4px}
   .p-head .code{font-size:13px;font-weight:800;letter-spacing:3px;color:var(--accent)}
-  .p-head h2{font-size:clamp(22px,3.6vw,30px)}
-  .p-head .sub{color:var(--muted);font-size:14px}
-  .lead{color:var(--muted);margin:10px 0 4px;font-size:14.5px;max-width:760px}
+  .p-head h2{font-size:clamp(21px,3.4vw,28px)}
+  .p-head .sub{color:var(--muted);font-size:13.5px}
+  .lead{color:var(--muted);margin:8px 0 2px;font-size:14px;max-width:780px}
 
-  .block{margin-top:26px}
-  .block h4{font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .block{margin-top:22px}
+  .block h4{font-size:14.5px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
   .block h4::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--accent)}
 
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{font-size:13px;color:var(--text);background:var(--panel);border:1px solid var(--line);padding:6px 12px;border-radius:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:12.5px;background:var(--panel);border:1px solid var(--line);padding:5px 11px;border-radius:8px}
 
-  .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   @media(max-width:640px){.feat{grid-template-columns:1fr}}
-  .feat .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-  .feat .item b{display:block;font-size:14px;margin-bottom:4px}
-  .feat .item span{font-size:13px;color:var(--muted)}
+  .feat .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .feat .item b{display:block;font-size:13.5px;margin-bottom:3px}
+  .feat .item span{font-size:12.5px;color:var(--muted)}
 
-  .hl-list{display:grid;gap:10px}
-  .hl-list .h{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 16px}
-  .hl-list .n{flex:none;width:24px;height:24px;border-radius:7px;background:var(--accent);color:#06121f;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
-  .hl-list b{font-size:14px;display:block}
-  .hl-list p{font-size:13px;color:var(--muted)}
+  .hl-list{display:grid;gap:9px}
+  .hl-list .h{display:flex;gap:11px;align-items:flex-start;background:var(--panel);
+    border:1px solid var(--line);border-radius:12px;padding:12px 15px}
+  .hl-list .n{flex:none;width:22px;height:22px;border-radius:7px;background:var(--accent);
+    color:#06121f;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .hl-list b{font-size:13.5px;display:block}
+  .hl-list p{font-size:12.5px;color:var(--muted)}
 
   /* ---------- 架构图 ---------- */
-  .arch{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
-  .layer{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
-  .layer .lab{flex:none;width:88px;font-size:12px;color:var(--muted);display:flex;align-items:center}
-  .node{font-size:12.5px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:7px 11px}
-  .node.acc{background:color-mix(in srgb,var(--accent) 16%,var(--bg2));border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
-  .arrow{text-align:center;color:var(--muted);font-size:13px;padding:2px 0}
+  .arch{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .layer{display:flex;flex-wrap:wrap;gap:7px;margin:5px 0}
+  .layer .lab{flex:none;width:82px;font-size:11.5px;color:var(--muted);display:flex;align-items:center}
+  .node{font-size:12px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+  .node.acc{background:color-mix(in srgb,var(--accent) 16%,var(--bg2));
+    border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+  .arrow{text-align:center;color:var(--muted);font-size:12px;padding:1px 0}
 
-  /* ---------- 界面模拟 ---------- */
-  .mock{background:#0a0f1a;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-  .mbar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#131c2e;border-bottom:1px solid var(--line)}
-  .mbar .d{width:11px;height:11px;border-radius:50%}
-  .mbar .r{background:#ff5f57}.mbar .y{background:#febc2e}.mbar .g{background:#28c840}
-  .mbar .url{margin-left:12px;flex:1;font-size:11.5px;color:var(--muted);background:#0b1220;border:1px solid var(--line);border-radius:6px;padding:4px 10px;max-width:340px;overflow:hidden;white-space:nowrap}
-  .mbody{padding:16px}
+  /* ---------- 截图 ---------- */
+  .shots{display:grid;gap:14px}
+  .shot{background:#0a0f1a;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 14px 40px rgba(0,0,0,.35)}
+  .shot .mbar{display:flex;align-items:center;gap:6px;padding:9px 13px;background:#131c2e;
+    border-bottom:1px solid var(--line)}
+  .shot .d{width:10px;height:10px;border-radius:50%}
+  .shot .r{background:#ff5f57}.shot .y{background:#febc2e}.shot .g{background:#28c840}
+  .shot .url{margin-left:10px;flex:1;font-size:11px;color:var(--muted);background:#0b1220;
+    border:1px solid var(--line);border-radius:6px;padding:3px 9px;max-width:320px;
+    overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .shot img{display:block;width:100%;height:auto}
+  .shot-cap{font-size:12px;color:var(--muted);margin-top:7px;display:flex;align-items:center;gap:6px}
+  .shot-cap::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
 
-  /* DA 大屏 */
-  .dash-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .dash-h b{font-size:14px}
-  .live{font-size:10px;color:#2dd4a7;border:1px solid rgba(45,212,167,.4);background:rgba(45,212,167,.08);padding:2px 8px;border-radius:999px;display:flex;align-items:center;gap:5px}
-  .live::before{content:"";width:6px;height:6px;border-radius:50%;background:#2dd4a7;animation:blink 1.4s infinite}
-  @keyframes blink{50%{opacity:.3}}
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
-  @media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
-  .kpi{background:#131c2e;border:1px solid var(--line);border-radius:10px;padding:11px 13px}
-  .kpi .k{font-size:11px;color:var(--muted)}
-  .kpi .v{font-size:20px;font-weight:800;margin-top:2px}
-  .kpi .v small{font-size:11px;color:#2dd4a7;font-weight:600;margin-left:4px}
-  .dash-main{display:grid;grid-template-columns:1.6fr 1fr;gap:12px}
-  @media(max-width:640px){.dash-main{grid-template-columns:1fr}}
-  .panel-box{background:#131c2e;border:1px solid var(--line);border-radius:10px;padding:13px}
-  .panel-box .t{font-size:12px;color:var(--muted);margin-bottom:10px}
-  .bars{display:flex;align-items:flex-end;gap:8px;height:110px}
-  .bars i{flex:1;background:linear-gradient(180deg,var(--da),#1d4ed8);border-radius:4px 4px 0 0;opacity:.85}
-  .donut{width:110px;height:110px;border-radius:50%;margin:4px auto;background:conic-gradient(var(--da) 0 82%,#2dd4a7 82% 95%,#334155 95% 100%);display:flex;align-items:center;justify-content:center}
-  .donut::after{content:"98.6%";width:74px;height:74px;border-radius:50%;background:#131c2e;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
-  .leg{display:flex;justify-content:center;gap:14px;font-size:11px;color:var(--muted);margin-top:8px}
-  .leg i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px}
+  /* 手机框 */
+  .phone-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+  .phone{flex:none;width:300px;max-width:100%;background:#0a0f1a;border:1px solid var(--line);
+    border-radius:26px;padding:8px;box-shadow:0 14px 40px rgba(0,0,0,.4)}
+  .phone img{display:block;width:100%;height:auto;border-radius:19px}
+  @media(max-width:420px){.phone{width:100%}}
 
-  /* 表格 */
-  .table{width:100%;border-collapse:collapse;font-size:12.5px}
-  .table th,.table td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
-  .table th{color:var(--muted);font-weight:600}
-  .pill{font-size:11px;padding:2px 8px;border-radius:999px}
-  .pill.ok{color:#2dd4a7;background:rgba(45,212,167,.12)}
-  .pill.warn{color:#f5b942;background:rgba(245,185,66,.12)}
-  .pill.run{color:#60a5fa;background:rgba(96,165,250,.12)}
-
-  /* 侧栏(HL) */
-  .hl-layout{display:grid;grid-template-columns:120px 1fr;gap:12px}
-  @media(max-width:560px){.hl-layout{grid-template-columns:1fr}}
-  .side{background:#131c2e;border:1px solid var(--line);border-radius:10px;padding:10px}
-  .side .m{font-size:12px;color:var(--muted);padding:6px 8px;border-radius:6px}
-  .side .m.on{background:color-mix(in srgb,var(--hl) 18%,transparent);color:var(--hl);font-weight:600}
-
-  /* 聊天(HMDP) */
-  .chat{display:flex;flex-direction:column;gap:12px;max-width:620px;margin:0 auto}
-  .bubble{max-width:82%;font-size:13px;padding:10px 14px;border-radius:14px;line-height:1.55}
-  .bubble.user{align-self:flex-end;background:linear-gradient(135deg,var(--hmdp),#6d28d9);border-bottom-right-radius:4px}
-  .bubble.ai{align-self:flex-start;background:#131c2e;border:1px solid var(--line);border-bottom-left-radius:4px}
-  .tool-call{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--gold);background:rgba(245,185,66,.1);border:1px dashed rgba(245,185,66,.4);border-radius:6px;padding:3px 8px;margin-bottom:6px}
-  .skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-  .skills span{font-size:12px;color:var(--hmdp);border:1px solid rgba(139,92,246,.4);background:rgba(139,92,246,.08);padding:5px 11px;border-radius:999px}
-  .input-bar{margin-top:14px;display:flex;gap:8px;align-items:center;background:#131c2e;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
-  .input-bar .ph{flex:1;font-size:12.5px;color:var(--muted)}
-  .input-bar .send{font-size:12px;background:var(--hmdp);color:#fff;padding:6px 14px;border-radius:8px}
+  /* 图 vs 示意 */
+  .mockup-note{font-size:12px;color:var(--muted);background:var(--panel);
+    border:1px dashed var(--line);border-radius:10px;padding:9px 13px;margin-top:10px}
 
   /* ---------- 页脚 ---------- */
-  footer{margin-top:56px;border-top:1px solid var(--line);padding:28px 0 44px;text-align:center;color:var(--muted);font-size:13px}
-  footer .safe{display:inline-flex;align-items:center;gap:7px;margin-top:8px;font-size:12.5px}
+  footer{border-top:1px solid var(--line);padding:24px 0 40px;text-align:center;color:var(--muted);font-size:12.5px}
+  footer .safe{display:inline-flex;align-items:center;gap:7px;margin-top:6px}
   footer .safe::before{content:"✓";color:#2dd4a7;font-weight:700}
-
-  .top{padding:10px 0 0;font-size:13px;color:var(--muted)}
-  .top a:hover{color:var(--text)}
+  .pager{display:flex;justify-content:space-between;gap:10px;margin-top:30px;padding-top:18px;
+    border-top:1px solid var(--line);font-size:13px}
+  .pager button{font:inherit;font-size:13px;background:var(--panel);color:var(--text);
+    border:1px solid var(--line);border-radius:9px;padding:8px 14px;cursor:pointer;transition:.18s}
+  .pager button:hover{border-color:var(--accent);color:var(--accent)}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <div class="brand"><span class="dot"></span>项目作品集 <span style="color:var(--muted);font-weight:400;font-size:12px">Portfolio</span></div>
-    <nav class="nav-links">
-      <a href="#da">DA</a>
-      <a href="#hl">HL</a>
-      <a href="#hmdp">HMDP</a>
-    </nav>
+    <div class="brand"><span class="dot"></span>项目作品集</div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="home"><span class="tc">概览</span></button>
+      <button class="tab" data-tab="da" style="--accent:var(--da)"><span class="tc">DA</span>发动机 MES</button>
+      <button class="tab" data-tab="hl" style="--accent:var(--hl)"><span class="tc">HL</span>零部件 MES</button>
+      <button class="tab" data-tab="hmdp" style="--accent:var(--hmdp)"><span class="tc">HMDP</span>AI 本地生活</button>
+    </div>
   </div>
 </header>
 
 <div class="wrap">
 
-  <!-- Hero -->
   <section class="hero">
     <span class="tag">全栈工程师 · 已脱敏项目展示</span>
-    <h1><span id="name">YOUR_NAME</span><br>三个实战项目的<span class="grad">可视化预览</span></h1>
-    <p><span id="title">YOUR_TITLE</span>。以下为本人主导/参与开发的三套系统：两套制造业 MES（制造执行系统）与一套 AI 本地生活系统。全部为静态参考展示，不连接数据库、不含任何生产数据。</p>
+    <h1><span id="name">YOUR_NAME</span> · 三个实战项目的<span class="grad">可视化预览</span></h1>
+    <p><span id="title">YOUR_TITLE</span>。两套制造业 MES（制造执行系统）+ 一套 AI 本地生活系统，含真实界面截图。全部为静态展示，不连接数据库、不含任何生产数据。</p>
     <div class="meta">
-      <span>Vue 3 · TypeScript</span>
-      <span>Spring Boot · MyBatis-Plus</span>
-      <span>Redis · LangChain4j · MCP</span>
-      <span>多数据源 · 微服务集成</span>
+      <span>Vue 3 · TypeScript</span><span>Spring Boot · MyBatis-Plus</span>
+      <span>Redis · LangChain4j · MCP</span><span>多数据源 · 设备采集</span>
     </div>
-    <div class="note">🔒 <span>本页所有公司名称均已<b>以代号代替</b>，密码 / 内网 IP / 密钥已全部移除，可放心传播。</span></div>
+    <div class="note">🔒 公司名称已<b>以代号代替</b>，密码 / 内网 IP / 密钥全部移除，可放心传播。</div>
   </section>
 
-  <!-- 三卡片 -->
-  <div class="grid">
-    <a class="card" href="#da" style="--accent:var(--da)">
-      <div class="code">DA</div>
-      <h3>发动机装配 MES</h3>
-      <div class="desc">面向发动机制造企业的生产制造执行系统，覆盖安灯、工艺建模、计划排程、质量追溯与生产大屏。</div>
-      <div class="tags"><i>Vue3</i><i>Spring Boot</i><i>多数据源</i><i>ECharts</i></div>
-      <div class="go">查看详情</div>
-    </a>
-    <a class="card" href="#hl" style="--accent:var(--hl)">
-      <div class="code">HL</div>
-      <h3>零部件制造 MES</h3>
-      <div class="desc">面向商用车零部件企业的 MES，聚焦物料/料箱仓储、激光打标采集、小时产量与翻新管理。</div>
-      <div class="tags"><i>Vue3</i><i>Spring Boot</i><i>WMS</i><i>OPC UA</i></div>
-      <div class="go">查看详情</div>
-    </a>
-    <a class="card" href="#hmdp" style="--accent:var(--hmdp)">
-      <div class="code">HMDP</div>
-      <h3>AI 本地生活系统</h3>
-      <div class="desc">在开源点评项目基础上加入大模型能力：AI 技能中心、MCP Server 与可工具调用的智能客服。</div>
-      <div class="tags"><i>LangChain4j</i><i>MCP</i><i>Redis</i><i>Spring Boot 3</i></div>
-      <div class="go">查看详情</div>
-    </a>
-  </div>
+  <!-- ==================== 概览 ==================== -->
+  <section class="panel active" id="panel-home">
+    <div class="grid">
+      <button class="card" data-go="da" style="--accent:var(--da)">
+        <div class="code">DA</div>
+        <h3>发动机装配 MES</h3>
+        <div class="desc">面向发动机制造企业的生产制造执行系统，覆盖安灯、工艺建模、计划排程、质量追溯与生产大屏。</div>
+        <div class="tags"><i>Vue3</i><i>Spring Boot</i><i>多数据源</i><i>ECharts</i></div>
+        <div class="go">查看详情</div>
+      </button>
+      <button class="card" data-go="hl" style="--accent:var(--hl)">
+        <div class="code">HL</div>
+        <h3>零部件制造 MES</h3>
+        <div class="desc">面向商用车零部件企业的 MES，聚焦物料/料箱仓储、激光打标采集、小时产量与翻新管理。</div>
+        <div class="tags"><i>Vue3</i><i>Spring Boot</i><i>WMS</i><i>OPC UA</i></div>
+        <div class="go">查看详情</div>
+      </button>
+      <button class="card" data-go="hmdp" style="--accent:var(--hmdp)">
+        <div class="code">HMDP</div>
+        <h3>AI 本地生活系统</h3>
+        <div class="desc">在开源点评项目基础上加入大模型能力：AI 技能中心、MCP Server 与可工具调用的智能客服。</div>
+        <div class="tags"><i>LangChain4j</i><i>MCP</i><i>Redis</i><i>Boot 3</i></div>
+        <div class="go">查看详情</div>
+      </button>
+    </div>
+    <div class="mockup-note">点击上方任意项目卡片，或使用顶部标签切换查看详情。每个项目页均包含<b>原生界面截图</b>、技术架构与核心亮点。</div>
+  </section>
 
-  <!-- ================= DA ================= -->
-  <section class="project" id="da" style="--accent:var(--da)">
+  <!-- ==================== DA ==================== -->
+  <section class="panel" id="panel-da" style="--accent:var(--da)">
     <div class="p-head">
-      <span class="code">DA</span>
-      <h2>发动机装配 MES</h2>
+      <span class="code">DA</span><h2>发动机装配 MES</h2>
       <span class="sub">制造执行系统 · 某发动机制造企业（代号 DA）</span>
     </div>
-    <p class="lead">一套覆盖「计划 → 执行 → 采集 → 追溯 → 分析」全流程的 MES 平台。前端 30+ 业务模块，后端约 900 个 Java 文件，支撑缸体/缸盖装配、螺栓拧紧、气密性检漏、清洁度测试等发动机生产关键环节。</p>
+    <p class="lead">覆盖「计划 → 执行 → 采集 → 追溯 → 分析」全流程的 MES 平台。前端 30+ 业务模块，后端约 900 个 Java 文件，支撑缸体/缸盖装配、螺栓拧紧、气密性检漏、清洁度测试等关键环节。</p>
 
     <div class="block">
-      <h4>技术栈</h4>
-      <div class="chips">
-        <span class="chip">Vue 3 + Vite + TypeScript</span>
-        <span class="chip">Element Plus + Pinia</span>
-        <span class="chip">ECharts 可视化</span>
-        <span class="chip">@vue-flow 流程图</span>
-        <span class="chip">Monaco / Ace 编辑器</span>
-        <span class="chip">Spring Boot 2.7</span>
-        <span class="chip">MyBatis-Plus 3.5</span>
-        <span class="chip">动态多数据源</span>
-        <span class="chip">Redis</span>
-        <span class="chip">WebSocket</span>
-        <span class="chip">JWT + Swagger</span>
-        <span class="chip">EasyExcel / POI</span>
-        <span class="chip">OpenFeign</span>
-        <span class="chip">FreeMarker 代码生成</span>
+      <h4>原生界面截图</h4>
+      <div class="shots">
+        <div>
+          <div class="shot">
+            <div class="mbar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="url">DA MES · 登录</span></div>
+            <img src="shots/da_login.jpg" alt="DA MES 登录界面" loading="lazy">
+          </div>
+          <div class="shot-cap">真实系统登录页（品牌名已替换为 DA）</div>
+        </div>
       </div>
     </div>
 
     <div class="block">
-      <h4>系统架构（分层）</h4>
+      <h4>技术栈</h4>
+      <div class="chips">
+        <span class="chip">Vue 3 + Vite + TS</span><span class="chip">Element Plus + Pinia</span>
+        <span class="chip">ECharts</span><span class="chip">@vue-flow</span><span class="chip">Monaco / Ace</span>
+        <span class="chip">Spring Boot 2.7</span><span class="chip">MyBatis-Plus 3.5</span>
+        <span class="chip">动态多数据源</span><span class="chip">Redis</span><span class="chip">WebSocket</span>
+        <span class="chip">JWT + Swagger</span><span class="chip">EasyExcel / POI</span>
+        <span class="chip">OpenFeign</span><span class="chip">FreeMarker 代码生成</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <h4>系统架构</h4>
       <div class="arch">
         <div class="layer"><span class="lab">展示层</span>
-          <span class="node acc">Vue3 单页应用</span><span class="node">大屏看板</span><span class="node">工艺建模流程图</span><span class="node">移动端适配</span>
-        </div>
+          <span class="node acc">Vue3 单页应用</span><span class="node">大屏看板</span><span class="node">工艺建模流程图</span><span class="node">移动端适配</span></div>
         <div class="arrow">▼ HTTP / WebSocket</div>
         <div class="layer"><span class="lab">接入层</span>
-          <span class="node acc">REST Controller</span><span class="node">JWT 认证</span><span class="node">Swagger 文档</span><span class="node">WebSocket 推送</span>
-        </div>
+          <span class="node acc">REST Controller</span><span class="node">JWT 认证</span><span class="node">Swagger</span><span class="node">WebSocket 推送</span></div>
         <div class="arrow">▼</div>
         <div class="layer"><span class="lab">业务层</span>
-          <span class="node acc">Service 业务编排</span><span class="node">规则引擎</span><span class="node">定时任务</span><span class="node">AOP 日志/权限</span><span class="node">代码生成器</span>
-        </div>
+          <span class="node acc">Service 编排</span><span class="node">规则引擎</span><span class="node">定时任务</span><span class="node">AOP 日志</span><span class="node">代码生成器</span></div>
         <div class="arrow">▼</div>
         <div class="layer"><span class="lab">数据层</span>
-          <span class="node acc">MySQL（业务）</span><span class="node acc">SQL Server（第三方数据）</span><span class="node acc">Oracle（数采池）</span><span class="node">Redis 缓存</span>
-        </div>
+          <span class="node acc">MySQL（业务）</span><span class="node acc">SQL Server（第三方）</span><span class="node acc">Oracle（数采池）</span><span class="node">Redis</span></div>
         <div class="arrow">▼</div>
         <div class="layer"><span class="lab">集成层</span>
-          <span class="node">OpenFeign</span><span class="node">邮件</span><span class="node">钉钉通知</span><span class="node">共享目录</span>
-        </div>
+          <span class="node">OpenFeign</span><span class="node">邮件</span><span class="node">钉钉通知</span><span class="node">共享目录</span></div>
       </div>
     </div>
 
     <div class="block">
       <h4>核心功能模块</h4>
       <div class="feat">
-        <div class="item"><b>生产大屏可视化</b><span>ECharts 实时看板：今日产量、设备稼动率、一次合格率（FTT）、无故障天数等关键指标。</span></div>
-        <div class="item"><b>安灯（Andon）管理</b><span>设备/产线异常呼叫、音柱提醒、故障率与类型占比统计分析。</span></div>
-        <div class="item"><b>工艺建模</b><span>基于 @vue-flow 的可拖拽流程图，前端建模 + 规则引擎联动，支持批次数量、正整数校验。</span></div>
-        <div class="item"><b>生产计划与排程</b><span>生产日历、计划下发、调度、缸体/缸盖在线生产目录，按完成时间排序。</span></div>
-        <div class="item"><b>质量检验与追溯</b><span>条码追溯、螺栓拧紧/气密检漏/清洁度等关键工序验证信息，质量门管控。</span></div>
-        <div class="item"><b>设备与供应商管理</b><span>设备台账、机型维护、供应商及物料、数据同步配置。</span></div>
+        <div class="item"><b>生产大屏可视化</b><span>ECharts 实时看板：今日产量、设备稼动率、一次合格率 FTT、无故障天数。</span></div>
+        <div class="item"><b>安灯（Andon）管理</b><span>异常呼叫、音柱提醒、设备故障率与类型占比分析。</span></div>
+        <div class="item"><b>工艺建模</b><span>@vue-flow 可拖拽流程图，前端建模 + 规则引擎联动。</span></div>
+        <div class="item"><b>生产计划与排程</b><span>生产日历、计划下发、调度、缸体/缸盖在线生产目录。</span></div>
+        <div class="item"><b>质量检验与追溯</b><span>条码追溯、螺栓拧紧 / 气密检漏 / 清洁度验证、质量门管控。</span></div>
+        <div class="item"><b>设备与供应商</b><span>设备台账、机型维护、供应商物料、数据同步配置。</span></div>
       </div>
     </div>
 
     <div class="block">
       <h4>技术亮点</h4>
       <div class="hl-list">
-        <div class="h"><span class="n">1</span><div><b>多数据源统一架构</b><p>一套服务通过 Dynamic-Datasource 同时对接 MySQL（业务）、SQL Server（第三方 AMS 数据）、Oracle（数采池），按需路由切换。</p></div></div>
-        <div class="h"><span class="n">2</span><div><b>代码生成器提效</b><p>基于 FreeMarker 模板一键生成 entity / mapper / service / controller / 前端 API，十余个 ftl 模板。</p></div></div>
-        <div class="h"><span class="n">3</span><div><b>实时监控与持久化</b><p>WebSocket 实时推送 + 定时任务将 FTT、小时产量等指标持久化，支撑大屏与报表。</p></div></div>
-        <div class="h"><span class="n">4</span><div><b>复杂业务建模</b><p>发动机装配线数十种实体（缸体、螺栓、检漏、曲轴、清洁度）与报表查询的统一建模。</p></div></div>
+        <div class="h"><span class="n">1</span><div><b>多数据源统一架构</b><p>通过 Dynamic-Datasource 同时对接 MySQL（业务）、SQL Server（第三方 AMS）、Oracle（数采池），按需路由。</p></div></div>
+        <div class="h"><span class="n">2</span><div><b>代码生成器提效</b><p>FreeMarker 模板一键生成 entity / mapper / service / controller / 前端 API。</p></div></div>
+        <div class="h"><span class="n">3</span><div><b>实时监控与持久化</b><p>WebSocket 实时推送 + 定时任务持久化 FTT、小时产量等指标，支撑大屏与报表。</p></div></div>
+        <div class="h"><span class="n">4</span><div><b>复杂业务建模</b><p>发动机装配线数十种实体（缸体、螺栓、检漏、曲轴、清洁度）统一建模。</p></div></div>
       </div>
     </div>
 
-    <div class="block">
-      <h4>界面预览（模拟）</h4>
-      <div class="mock">
-        <div class="mbar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="url">DA-MES · 生产监控大屏</span></div>
-        <div class="mbody">
-          <div class="dash-h"><b>生产监控大屏</b><span class="live">LIVE</span></div>
-          <div class="kpis">
-            <div class="kpi"><div class="k">今日产量</div><div class="v">1,280<small>+6.2%</small></div></div>
-            <div class="kpi"><div class="k">设备稼动率</div><div class="v">92.4<small>%</small></div></div>
-            <div class="kpi"><div class="k">一次合格率 FTT</div><div class="v">98.6<small>%</small></div></div>
-            <div class="kpi"><div class="k">无故障天数</div><div class="v">37<small>天</small></div></div>
-          </div>
-          <div class="dash-main">
-            <div class="panel-box">
-              <div class="t">各产线小时产量</div>
-              <div class="bars"><i style="height:42%"></i><i style="height:66%"></i><i style="height:54%"></i><i style="height:82%"></i><i style="height:70%"></i><i style="height:92%"></i><i style="height:76%"></i></div>
-            </div>
-            <div class="panel-box">
-              <div class="t">质量分布</div>
-              <div class="donut"></div>
-              <div class="leg"><span><i style="background:var(--da)"></i>合格</span><span><i style="background:#2dd4a7"></i>返修</span><span><i style="background:#334155"></i>待检</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="pager">
+      <button data-go="hl">← 下一个：HL 零部件 MES</button>
+      <button data-go="home">返回概览</button>
     </div>
-    <p class="top"><a href="#top">↑ 返回顶部</a></p>
   </section>
 
-  <!-- ================= HL ================= -->
-  <section class="project" id="hl" style="--accent:var(--hl)">
+  <!-- ==================== HL ==================== -->
+  <section class="panel" id="panel-hl" style="--accent:var(--hl)">
     <div class="p-head">
-      <span class="code">HL</span>
-      <h2>零部件制造 MES</h2>
+      <span class="code">HL</span><h2>零部件制造 MES</h2>
       <span class="sub">制造执行系统 · 某商用车零部件企业（代号 HL）</span>
     </div>
     <p class="lead">与 DA 共用同一套 MES 底座，针对零部件制造场景快速二次交付（后端约 700 个 Java 文件）。重点覆盖物料/料箱仓储（WMS）、激光打标数据采集、小时产量统计与翻新管理。</p>
 
     <div class="block">
+      <h4>原生界面截图</h4>
+      <div class="shots">
+        <div>
+          <div class="shot">
+            <div class="mbar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="url">HL MES · 登录</span></div>
+            <img src="shots/hl_login.jpg" alt="HL MES 登录界面" loading="lazy">
+          </div>
+          <div class="shot-cap">真实系统登录页（品牌名已替换为 HL）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
       <h4>技术栈</h4>
       <div class="chips">
-        <span class="chip">Vue 3 + Vite + TypeScript</span>
-        <span class="chip">Element Plus + Pinia</span>
-        <span class="chip">ECharts</span>
-        <span class="chip">Spring Boot 2.7</span>
-        <span class="chip">MyBatis-Plus</span>
-        <span class="chip">动态多数据源</span>
-        <span class="chip">Redis</span>
-        <span class="chip">WebSocket</span>
-        <span class="chip">OPC UA 采集</span>
-        <span class="chip">钉钉通知</span>
-        <span class="chip">EasyExcel</span>
+        <span class="chip">Vue 3 + Vite + TS</span><span class="chip">Element Plus + Pinia</span>
+        <span class="chip">ECharts</span><span class="chip">Spring Boot 2.7</span><span class="chip">MyBatis-Plus</span>
+        <span class="chip">动态多数据源</span><span class="chip">Redis</span><span class="chip">WebSocket</span>
+        <span class="chip">OPC UA 采集</span><span class="chip">钉钉通知</span><span class="chip">EasyExcel</span>
       </div>
     </div>
 
     <div class="block">
       <h4>核心功能模块</h4>
       <div class="feat">
-        <div class="item"><b>物料与料箱管理</b><span>物料基础信息、料箱（materialBin）全流程追踪：入库、库位、出库。</span></div>
-        <div class="item"><b>WMS 仓储</b><span>仓储实体建模与库位管理，与物料、翻新流程联动。</span></div>
-        <div class="item"><b>激光打标采集</b><span>对接激光打标设备（Laser），通过 OPC UA 采集点管理实时数据。</span></div>
-        <div class="item"><b>小时产量统计</b><span>BirthHourCount 小时产量 + 工序时间定时调度（ProcessTimeScheduler）。</span></div>
-        <div class="item"><b>翻新管理</b><span>refurbishment 翻新流程控制器，管理返厂翻新业务。</span></div>
-        <div class="item"><b>质量与设备</b><span>质量检验、设备管理、机型维护，复用底座通用能力。</span></div>
+        <div class="item"><b>物料与料箱管理</b><span>物料基础信息、料箱全流程追踪：入库、库位、出库。</span></div>
+        <div class="item"><b>WMS 仓储</b><span>仓储与库位建模，与物料、翻新流程联动。</span></div>
+        <div class="item"><b>激光打标采集</b><span>对接激光打标设备，通过 OPC UA 采集点实时取数。</span></div>
+        <div class="item"><b>小时产量统计</b><span>小时产量 + 工序时间定时调度器自动汇总。</span></div>
+        <div class="item"><b>翻新管理</b><span>返厂翻新业务流程管理。</span></div>
+        <div class="item"><b>质量与设备</b><span>质量检验、设备管理、机型维护，复用底座能力。</span></div>
       </div>
     </div>
 
     <div class="block">
       <h4>技术亮点</h4>
       <div class="hl-list">
-        <div class="h"><span class="n">1</span><div><b>同一底座二次交付</b><p>基于通用 MES 框架按客户裁剪（删减供应商/物料冗余、新增 WMS/激光/翻新），降低交付成本。</p></div></div>
+        <div class="h"><span class="n">1</span><div><b>同一底座二次交付</b><p>基于通用 MES 框架按客户裁剪（删减冗余、新增 WMS/激光/翻新），显著降低交付成本。</p></div></div>
         <div class="h"><span class="n">2</span><div><b>设备数据采集</b><p>OPC UA / 采集点管理打通激光打标等设备的实时数据链路。</p></div></div>
         <div class="h"><span class="n">3</span><div><b>定时统计</b><p>工序时间定时调度器自动汇总小时产量等指标。</p></div></div>
       </div>
     </div>
 
+    <div class="pager">
+      <button data-go="hmdp">下一个：HMDP AI 系统 →</button>
+      <button data-go="home">返回概览</button>
+    </div>
+  </section>
+
+  <!-- ==================== HMDP ==================== -->
+  <section class="panel" id="panel-hmdp" style="--accent:var(--hmdp)">
+    <div class="p-head">
+      <span class="code">HMDP</span><h2>AI 本地生活系统</h2>
+      <span class="sub">基于开源本地生活项目（代号 HMDP）扩展 AI 能力</span>
+    </div>
+    <p class="lead">在开源「点评 / 本地生活」项目（店铺、优惠券、订单、秒杀、预约）基础上加入大模型能力：AI 技能中心、MCP Server，以及支持工具调用的流式智能客服。</p>
+
     <div class="block">
-      <h4>界面预览（模拟）</h4>
-      <div class="mock">
-        <div class="mbar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="url">HL-MES · 物料与料箱管理</span></div>
-        <div class="mbody">
-          <div class="hl-layout">
-            <div class="side">
-              <div class="m on">物料管理</div>
-              <div class="m">料箱管理</div>
-              <div class="m">WMS 仓储</div>
-              <div class="m">激光采集</div>
-              <div class="m">翻新管理</div>
-              <div class="m">小时产量</div>
-            </div>
-            <div class="panel-box" style="background:#131c2e">
-              <div class="t">料箱库存列表</div>
-              <table class="table">
-                <tr><th>料箱编号</th><th>物料名称</th><th>库位</th><th>状态</th></tr>
-                <tr><td>BX-2024-001</td><td>缸盖毛坯</td><td>A-01-02</td><td><span class="pill ok">在库</span></td></tr>
-                <tr><td>BX-2024-015</td><td>曲轴半成品</td><td>B-03-01</td><td><span class="pill run">待加工</span></td></tr>
-                <tr><td>BX-2024-042</td><td>气门组件</td><td>C-02-05</td><td><span class="pill warn">待翻新</span></td></tr>
-                <tr><td>BX-2024-088</td><td>活塞组件</td><td>A-05-03</td><td><span class="pill ok">在库</span></td></tr>
-              </table>
-            </div>
+      <h4>原生界面截图</h4>
+      <div class="shots">
+        <div>
+          <div class="shot">
+            <div class="mbar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="url">HMDP · AI 技能中心</span></div>
+            <img src="shots/hmdp_skills.jpg" alt="HMDP AI 技能中心" loading="lazy">
           </div>
+          <div class="shot-cap">AI 技能中心：技能选择 / 参数表单 / 生成结果 / 最近记录</div>
+        </div>
+      </div>
+      <div class="phone-row" style="margin-top:14px">
+        <div class="phone"><img src="shots/hmdp_shoplist.jpg" alt="HMDP 店铺列表" loading="lazy"></div>
+        <div style="flex:1;min-width:200px">
+          <div class="shot-cap">商家 / 店铺列表页（移动端适配）</div>
+          <p style="font-size:12.5px;color:var(--muted);margin-top:8px">
+            截图中的店铺、评价、数据均为演示用假数据，仅用于展示界面与交互结构。
+          </p>
         </div>
       </div>
     </div>
-    <p class="top"><a href="#top">↑ 返回顶部</a></p>
-  </section>
-
-  <!-- ================= HMDP ================= -->
-  <section class="project" id="hmdp" style="--accent:var(--hmdp)">
-    <div class="p-head">
-      <span class="code">HMDP</span>
-      <h2>AI 本地生活系统</h2>
-      <span class="sub">基于开源本地生活项目（代号 HMDP）扩展 AI 能力</span>
-    </div>
-    <p class="lead">在开源「点评/本地生活」项目（店铺、优惠券、订单、秒杀、预约）基础上，加入大模型能力：AI 技能中心、MCP Server，以及支持工具调用的流式智能客服。</p>
 
     <div class="block">
       <h4>技术栈</h4>
       <div class="chips">
-        <span class="chip">Spring Boot 3.5 + JDK 17</span>
-        <span class="chip">MyBatis-Plus 3.5</span>
-        <span class="chip">Redis + Redisson</span>
-        <span class="chip">LangChain4j 1.0</span>
-        <span class="chip">MCP SDK 0.12</span>
-        <span class="chip">WebFlux 流式</span>
-        <span class="chip">MySQL</span>
-        <span class="chip">Nginx 静态托管</span>
+        <span class="chip">Spring Boot 3.5 + JDK 17</span><span class="chip">MyBatis-Plus 3.5</span>
+        <span class="chip">Redis + Redisson</span><span class="chip">LangChain4j 1.0</span>
+        <span class="chip">MCP SDK 0.12</span><span class="chip">WebFlux 流式</span>
+        <span class="chip">MySQL</span><span class="chip">Nginx 静态托管</span>
       </div>
     </div>
 
@@ -458,20 +410,16 @@
       <h4>系统架构</h4>
       <div class="arch">
         <div class="layer"><span class="lab">客户端</span>
-          <span class="node acc">Nginx 静态前端</span><span class="node">移动端适配</span>
-        </div>
+          <span class="node acc">Nginx 静态前端</span><span class="node">移动端适配</span></div>
         <div class="arrow">▼ HTTP / SSE 流式</div>
         <div class="layer"><span class="lab">应用层</span>
-          <span class="node acc">REST Controller</span><span class="node acc">@AiService 客服</span><span class="node">AI 技能中心</span><span class="node">秒杀/订单/预约</span>
-        </div>
+          <span class="node acc">REST Controller</span><span class="node acc">@AiService 客服</span><span class="node">AI 技能中心</span><span class="node">秒杀 / 订单 / 预约</span></div>
         <div class="arrow">▼</div>
         <div class="layer"><span class="lab">能力层</span>
-          <span class="node acc">LangChain4j（大模型）</span><span class="node acc">MCP Server（工具暴露）</span><span class="node">Redis Lua / 分布式锁</span>
-        </div>
+          <span class="node acc">LangChain4j（大模型）</span><span class="node acc">MCP Server</span><span class="node">Redis Lua / 分布式锁</span></div>
         <div class="arrow">▼</div>
         <div class="layer"><span class="lab">数据层</span>
-          <span class="node">MySQL</span><span class="node">Redis</span><span class="node">大模型 API（qwen）</span>
-        </div>
+          <span class="node">MySQL</span><span class="node">Redis</span><span class="node">大模型 API</span></div>
       </div>
     </div>
 
@@ -479,55 +427,76 @@
       <h4>核心功能模块</h4>
       <div class="feat">
         <div class="item"><b>AI 技能中心</b><span>8 个内置技能（探店笔记、评价总结、评价回复、优惠券文案、店铺标签、经营日报、短视频脚本、活动方案），DB 存 prompt 模板，运行时渲染调用。</span></div>
-        <div class="item"><b>MCP Server</b><span>将店铺/优惠券/订单/预约/AI 技能暴露为标准 MCP 工具（无状态同步 Server）。</span></div>
-        <div class="item"><b>AI 智能客服</b><span>LangChain4j @AiService，流式回复 + 工具调用 + 多轮记忆（MemoryId）。</span></div>
-        <div class="item"><b>秒杀系统</b><span>Redis Lua 脚本原子扣减 + Redisson 分布式锁 + 一人一单限制。</span></div>
+        <div class="item"><b>MCP Server</b><span>将店铺 / 优惠券 / 订单 / 预约 / AI 技能暴露为 MCP 工具（无状态同步 Server）。</span></div>
+        <div class="item"><b>AI 智能客服</b><span>LangChain4j @AiService，流式回复 + 工具调用 + 多轮记忆。</span></div>
+        <div class="item"><b>秒杀系统</b><span>Redis Lua 脚本原子扣减 + Redisson 分布式锁 + 一人一单。</span></div>
         <div class="item"><b>缓存三件套</b><span>布隆过滤器（穿透）、互斥锁（击穿）、过期随机（雪崩）+ GEO 附近商户 + Redis Stream 订单队列。</span></div>
-        <div class="item"><b>基础业务</b><span>店铺/类型、优惠券、博客、关注、签到、上传。</span></div>
+        <div class="item"><b>基础业务</b><span>店铺 / 类型、优惠券、博客、关注、签到、上传。</span></div>
       </div>
     </div>
 
     <div class="block">
       <h4>技术亮点</h4>
       <div class="hl-list">
-        <div class="h"><span class="n">1</span><div><b>AI 技能可配置化</b><p>技能列表、prompt 模板存数据库，支持启用/停用、排序；带 Redis 限流（每分钟 20 次）与调用失败本地兜底。</p></div></div>
+        <div class="h"><span class="n">1</span><div><b>AI 技能可配置化</b><p>技能列表与 prompt 模板存数据库，支持启停与排序；带 Redis 限流（每分钟 20 次）与调用失败本地兜底。</p></div></div>
         <div class="h"><span class="n">2</span><div><b>MCP 标准化</b><p>业务能力通过 MCP 协议对外暴露，AI 与业务解耦，可被任意 MCP 客户端调用。</p></div></div>
-        <div class="h"><span class="n">3</span><div><b>LangChain4j 工具调用</b><p>智能客服绑定 5 个工具（店铺/优惠券/订单/预约/AI 技能），大模型按需选择工具获取实时数据。</p></div></div>
-        <div class="h"><span class="n">4</span><div><b>秒杀高并发</b><p>Lua 脚本保证库存扣减原子性，Redisson 分布式锁防超卖，解决缓存穿透/击穿/雪崩。</p></div></div>
+        <div class="h"><span class="n">3</span><div><b>LangChain4j 工具调用</b><p>智能客服绑定 5 个工具（店铺 / 优惠券 / 订单 / 预约 / AI 技能），按需获取实时数据。</p></div></div>
+        <div class="h"><span class="n">4</span><div><b>秒杀高并发</b><p>Lua 保证库存扣减原子性，分布式锁防超卖，解决缓存穿透 / 击穿 / 雪崩。</p></div></div>
       </div>
     </div>
 
-    <div class="block">
-      <h4>界面预览（模拟 · AI 客服）</h4>
-      <div class="mock">
-        <div class="mbar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="url">HMDP · AI 智能客服</span></div>
-        <div class="mbody">
-          <div class="chat">
-            <div class="bubble user">帮我看看 A 店最近评价怎么样？</div>
-            <div class="bubble ai">
-              <span class="tool-call">⚙ 调用工具 · 评价总结（review_summary）</span><br>
-              该店整体评价较好，优点是环境适合拍照、菜品有记忆点；待优化点集中在排队等待和服务响应速度，建议商家优化高峰时段引导。
-            </div>
-            <div class="bubble user">帮我写一条优惠券文案</div>
-            <div class="bubble ai">
-              <span class="tool-call">⚙ 调用工具 · 优惠券文案（coupon_copy）</span><br>
-              「限时福利｜双人套餐惊喜价上线，到店立享，适合聚会、约会和周末放松。」
-            </div>
-          </div>
-          <div class="skills"><span>探店笔记</span><span>评价总结</span><span>评价回复</span><span>优惠券文案</span><span>短视频脚本</span></div>
-          <div class="input-bar"><span class="ph">输入你的问题…</span><span class="send">发送</span></div>
-        </div>
-      </div>
+    <div class="pager">
+      <button data-go="da">← 回到 DA 发动机 MES</button>
+      <button data-go="home">返回概览</button>
     </div>
-    <p class="top"><a href="#top">↑ 返回顶部</a></p>
   </section>
 
   <footer>
     <div>项目作品集 · DA / HL / HMDP</div>
-    <div class="safe">所有数据已脱敏：公司名称以代号表示，密码、内网地址、密钥均已移除，无数据库连接</div>
-    <div style="margin-top:6px;font-size:12px;opacity:.7">静态单文件 · 可离线预览 · 适配手机 / 桌面</div>
+    <div class="safe">公司名称以代号表示，密码、内网地址、密钥均已移除，无数据库连接</div>
+    <div style="margin-top:5px;opacity:.7">静态页面 · 适配手机 / 桌面</div>
   </footer>
-
 </div>
+
+<script>
+(function () {
+  var panels = {
+    home: document.getElementById('panel-home'),
+    da: document.getElementById('panel-da'),
+    hl: document.getElementById('panel-hl'),
+    hmdp: document.getElementById('panel-hmdp')
+  };
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+
+  function show(key, updateHash) {
+    if (!panels[key]) key = 'home';
+    Object.keys(panels).forEach(function (k) {
+      panels[k].classList.toggle('active', k === key);
+    });
+    tabs.forEach(function (t) {
+      t.classList.toggle('active', t.dataset.tab === key);
+    });
+    if (updateHash !== false) {
+      history.replaceState(null, '', key === 'home' ? location.pathname : '#' + key);
+    }
+    document.body.classList.toggle('on-project', key !== 'home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { show(t.dataset.tab); });
+  });
+  document.querySelectorAll('[data-go]').forEach(function (el) {
+    el.addEventListener('click', function () { show(el.dataset.go); });
+  });
+
+  var initial = (location.hash || '').replace('#', '') || 'home';
+  show(initial, false);
+
+  window.addEventListener('hashchange', function () {
+    show((location.hash || '').replace('#', '') || 'home', false);
+  });
+})();
+</script>
 </body>
 </html>
