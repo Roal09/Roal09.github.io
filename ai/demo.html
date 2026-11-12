@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 技能中心 · 交互演示</title>
+<link rel="stylesheet" href="element.css">
+<link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="skills.css">
+<style>
+  html,body{margin:0;padding:0;height:100%;overflow:auto;background:#f7f3ea}
+  .skill-shell{min-height:100%}
+</style>
+</head>
+<body>
+<div id="app" class="skill-shell"><header class="skill-topbar"><button aria-label="返回" class="icon-btn"><i class="el-icon-arrow-left"></i></button> <div><div class="eyebrow">LocalPilot AI</div> <h1>AI技能中心</h1></div> <button aria-label="刷新记录" class="icon-btn"><i class="el-icon-refresh"></i></button></header> <main class="skill-main"><section class="skill-rail"><button class="skill-card active"><span class="skill-scene">用户</span> <strong>AI写探店笔记</strong> <small>根据店铺和关键词生成可编辑的探店笔记草稿。</small></button><button class="skill-card"><span class="skill-scene">商家</span> <strong>AI总结店铺评价</strong> <small>将评价内容总结成优点、问题和适合人群。</small></button><button class="skill-card"><span class="skill-scene">商家</span> <strong>AI生成评价回复</strong> <small>为好评或差评生成礼貌、可直接编辑的商家回复。</small></button><button class="skill-card"><span class="skill-scene">商家</span> <strong>AI生成优惠券文案</strong> <small>生成优惠券标题、副标题和活动推广话术。</small></button><button class="skill-card"><span class="skill-scene">商家</span> <strong>AI提取店铺标签</strong> <small>根据店铺信息提炼用于推荐和搜索的标签。</small></button><button class="skill-card"><span class="skill-scene">商家</span> <strong>AI生成经营日报</strong> <small>把商家经营数据转换成日报摘要。</small></button><button class="skill-card"><span class="skill-scene">商家</span> <strong>AI生成短视频脚本</strong> <small>生成本地生活探店短视频脚本。</small></button><button class="skill-card"><span class="skill-scene">商家</span> <strong>AI生成活动方案草稿</strong> <small>生成可由商家确认后执行的活动方案草稿。</small></button></section> <section class="skill-workbench"><div class="panel-head"><div><span class="skill-scene">用户</span> <h2>AI写探店笔记</h2></div> <button class="ghost-btn"><i class="el-icon-delete"></i>
+              清空
+            </button></div> <div class="dynamic-form"><label class="field-row"><span>店铺名称</span> <input placeholder="店铺名称"></label><label class="field-row"><span>体验关键词</span> <textarea placeholder="体验关键词" rows="3"></textarea></label><label class="field-row"><span>文风</span> <input placeholder="文风"></label></div> <div class="action-row"><button class="run-btn"><i class="el-icon-magic-stick"></i>
+              生成
+            </button> <button disabled="disabled" class="ghost-btn"><i class="el-icon-document-copy"></i>
+              复制
+            </button></div> <div class="empty-result"><i class="el-icon-edit-outline"></i></div></section></main> <section class="run-history"><div class="panel-head compact"><h2>最近记录</h2> <span>3 条</span></div> <div class="history-list"><article class="history-item"><div><strong>AI总结店铺评价</strong> <span>2026-03-18T10:24:11</span></div> <p>评价摘要：环境适合拍照，菜品有记忆点；待优化点为排队与服务响应。</p></article><article class="history-item"><div><strong>AI生成优惠券文案</strong> <span>2026-03-18T10:12:02</span></div> <p>限时福利｜双人套餐惊喜价上线，到店立享。</p></article><article class="history-item"><div><strong>AI写探店笔记</strong> <span>2026-03-17T21:03:45</span></div> <p>【探店笔记】整体体验围绕环境、服务、口味展开。</p></article></div></section></div>
+<script>
+(function(){
+  var SKILLS = [{"s": "用户", "n": "AI写探店笔记", "f": [["店铺名称", "示例茶餐厅"], ["体验关键词", "招牌菜、环境、服务、人均", "area"], ["文风", "真实、有烟火气"]], "o": "【探店笔记】\n\n今天打卡了「示例茶餐厅」，整体体验围绕招牌菜、环境和服务展开。\n\n推荐理由：\n· 招牌菜出餐稳定，特色菜有记忆点\n· 环境适合拍照，桌面间距宽松\n· 人均 68 元，适合朋友小聚\n\n避坑提醒：\n· 晚市高峰需排队，建议提前到店\n· 部分套餐需两人起订"}, {"s": "商家", "n": "AI总结店铺评价", "f": [["店铺名称", "示例茶餐厅"], ["评价原文", "环境好，菜有点咸，服务及时", "area"]], "o": "评价摘要\n\n优势：\n· 环境舒适、适合拍照\n· 服务响应及时\n\n待优化：\n· 部分菜品口味偏咸，建议调整出品标准\n\n适合人群：\n· 朋友聚会、周末放松\n· 对拍照和环境有要求的客群"}, {"s": "商家", "n": "AI生成评价回复", "f": [["店铺名称", "示例茶餐厅"], ["用户评价", "环境不错，就是上菜有点慢", "area"], ["回复语气", "真诚"]], "o": "您好，非常感谢您的反馈，也抱歉让您等待。\n\n我们已记录出餐节奏的问题，会在高峰时段增加出品岗位并优化流程。\n\n期待您下次到店能有更好的体验。"}, {"s": "商家", "n": "AI生成优惠券文案", "f": [["店铺名称", "示例茶餐厅"], ["优惠力度", "满 100 减 30"], ["目标人群", "情侣 / 朋友聚会"]], "o": "券标题：双人套餐限时立减 30 元\n副标题：招牌菜组合，到店即享\n\n推广话术：\n周末不知道吃什么？双人套餐一次打卡招牌菜，到店立减 30 元，适合约会与小聚。"}, {"s": "商家", "n": "AI提取店铺标签", "f": [["店铺名称", "示例茶餐厅"], ["店铺描述", "环境好，出片，人均 68，适合聚会", "area"]], "o": "推荐标签：\n高性价比 · 适合拍照 · 朋友聚会 · 招牌菜 · 环境舒适 · 周末可选 · 地铁附近 · 适合约会"}, {"s": "商家", "n": "AI生成经营日报", "f": [["店铺名称", "示例茶餐厅"], ["今日数据", "客流 132，核销券 26 张，评分 4.8", "area"]], "o": "经营日报\n\n今日表现：\n· 客流 132 人，核销券 26 张，转化正常\n· 评分维持 4.8，口碑稳定\n\n风险提醒：\n· 晚市 18:30-19:30 排队较久\n\n明日建议：\n· 提前备货高峰菜品\n· 主推双人套餐券承接周末流量"}, {"s": "商家", "n": "AI生成短视频脚本", "f": [["店铺名称", "示例茶餐厅"], ["卖点", "招牌菜、环境"], ["视频时长", "30 秒"]], "o": "短视频脚本（30s）\n\n0-3s 门头特写，字幕：周末就吃这家\n3-11s 招牌菜出锅画面，口播：这一口是招牌\n11-20s 环境空镜，口播：环境宽松，适合聊天\n20-27s 两人用餐画面，口播：人均 68 吃得踏实\n27-30s 结尾引导：到店出示本条视频领小食"}, {"s": "商家", "n": "AI生成活动方案草稿", "f": [["店铺名称", "示例茶餐厅"], ["活动目标", "提升周末客流"], ["预算", "3000 元"]], "o": "活动方案草稿\n\n主题：周末双人套餐季\n\n步骤：\n1. 上线双人套餐券，限时限量\n2. 探店笔记 5 篇 + 短视频 2 条扩散\n3. 到店核销赠送小食，提升复购\n\n预算分配：券补贴 2000 元，内容 600 元，物料 400 元\n周期：3-5 天\n\n（本方案需商家确认后执行）"}];
+  var cards = [].slice.call(document.querySelectorAll('.skill-card'));
+  var work = document.querySelector('.skill-workbench');
+  if (!work || !cards.length) return;
+  var head = work.querySelector('.panel-head');
+  var form = work.querySelector('.dynamic-form');
+  var runBtn = work.querySelector('.run-btn');
+  var cur = 0, running = false;
+
+  function clearResult(){
+    var box = work.querySelector('.result-box');
+    if (box) box.remove();
+    if (!work.querySelector('.empty-result')) {
+      var d = document.createElement('div');
+      d.className = 'empty-result';
+      d.innerHTML = '<i class="el-icon-edit-outline"></i>';
+      work.appendChild(d);
+    }
+  }
+
+  function select(i){
+    cur = i;
+    cards.forEach(function(c, j){ c.classList.toggle('active', i === j); });
+    var s = SKILLS[i];
+    var scene = head.querySelector('.skill-scene');
+    if (scene) scene.textContent = s.s;
+    var h2 = head.querySelector('h2');
+    if (h2) h2.textContent = s.n;
+    form.innerHTML = s.f.map(function(f){
+      var ctrl = f[2] === 'area'
+        ? '<textarea rows="3" placeholder="' + f[0] + '">' + f[1] + '</textarea>'
+        : '<input placeholder="' + f[0] + '" value="' + f[1] + '">';
+      return '<label class="field-row"><span>' + f[0] + '</span>' + ctrl + '</label>';
+    }).join('');
+    clearResult();
+  }
+
+  function run(){
+    if (running) return;
+    running = true;
+    runBtn.disabled = true;
+    var txt = SKILLS[cur].o, i = 0;
+    var e = work.querySelector('.empty-result');
+    if (e) e.remove();
+    var box = work.querySelector('.result-box');
+    if (!box) { box = document.createElement('pre'); box.className = 'result-box'; work.appendChild(box); }
+    box.textContent = '';
+    var t = setInterval(function(){
+      i += 3;
+      box.textContent = txt.slice(0, i);
+      if (i >= txt.length) { clearInterval(t); running = false; runBtn.disabled = false; }
+    }, 16);
+  }
+
+  cards.forEach(function(c, i){ c.addEventListener('click', function(){ select(i); }); });
+  if (runBtn) runBtn.addEventListener('click', run);
+  select(0);
+})();
+</script>
+</body>
+</html>
