@@ -322,6 +322,183 @@ footer .row{display:flex;align-items:center;gap:8px}
 footer .ok{color:var(--hl)}
 footer .sep{opacity:.4}
 
+/* ============ 交互预览 ============ */
+.demo{position:relative;border-radius:var(--r-md);overflow:hidden;
+  border:1px solid var(--line-2);background:#eef2f8;
+  box-shadow:0 30px 80px -40px rgba(0,0,0,.95),0 2px 10px rgba(0,0,0,.45)}
+.demo-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;
+  background:rgba(10,13,19,.94);border-bottom:1px solid var(--line)}
+.demo-bar .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.demo-bar .dot:nth-child(1){background:#ff5f57}
+.demo-bar .dot:nth-child(2){background:#febc2e}
+.demo-bar .dot:nth-child(3){background:#28c840}
+.demo-bar .addr{margin-left:8px;font-size:11px;color:var(--text-3);
+  padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:rgba(0,0,0,.35);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.demo-tip{margin-left:auto;font-size:11px;color:var(--text-3);display:none;align-items:center;gap:6px}
+.demo-tip b{color:var(--accent);font-weight:600}
+@media(min-width:820px){.demo-tip{display:flex}}
+
+/* --- MES 模拟界面 --- */
+.mes{--mes-ac:#0d94b0;display:flex;height:540px;background:#eef2f8;color:#1f2937;
+  font-size:13px;line-height:1.5;letter-spacing:0}
+.mes-side{flex:none;width:198px;display:flex;flex-direction:column;gap:2px;padding:14px 10px;
+  background:linear-gradient(180deg,#0e2434,#0a1a27);overflow:auto;scrollbar-width:none}
+.mes-side::-webkit-scrollbar{display:none}
+.mes-logo{display:flex;align-items:center;gap:9px;padding:2px 8px 14px;color:#fff;font-weight:700;font-size:13px}
+.mes-logo i{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-style:normal;
+  font-size:9px;font-weight:800;color:#04202b;background:linear-gradient(145deg,#5ee0f0,#2aa8c9)}
+.mg{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;cursor:pointer;
+  color:#a9c6d8;font-size:12.5px;-webkit-user-select:none;user-select:none;
+  transition:background .18s,color .18s}
+.mg:hover{background:rgba(255,255,255,.07);color:#fff}
+.mg svg{width:15px;height:15px;flex:none;opacity:.85}
+.mg .chev{margin-left:auto;width:7px;height:7px;border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .22s;opacity:.6}
+.mg.open .chev{transform:rotate(45deg)}
+.sub{display:none;flex-direction:column;gap:2px;margin:2px 0 4px}
+.sub.open{display:flex}
+.mi{display:flex;align-items:center;gap:7px;padding:7px 10px 7px 32px;border-radius:8px;cursor:pointer;
+  color:#93b3c8;font-size:12.2px;-webkit-user-select:none;user-select:none;
+  transition:background .18s,color .18s}
+.mi::before{content:"";width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.5;flex:none}
+.mi:hover{background:rgba(255,255,255,.06);color:#fff}
+.mi.on{background:color-mix(in srgb,var(--mes-ac) 26%,transparent);color:#fff}
+.mi.on::before{opacity:1;box-shadow:0 0 6px var(--mes-ac)}
+
+.mes-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.mes-top{flex:none;height:46px;background:#fff;border-bottom:1px solid #e4eaf3;
+  display:flex;align-items:center;gap:10px;padding:0 16px}
+.mes-crumb{font-size:12.4px;color:#64748b}
+.mes-crumb b{color:#0f172a;font-weight:600}
+.mes-user{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:#64748b}
+.mes-ava{width:24px;height:24px;border-radius:50%;background:var(--mes-ac);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:700}
+.mes-body{flex:1;overflow:auto;padding:16px}
+
+.wel{background:linear-gradient(100deg,#e9f1ff,#f2ecff);border:1px solid #dee7f7;
+  border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.wel h3{font-size:14.5px;font-weight:700;color:#0f172a}
+.wel .row{display:flex;flex-wrap:wrap;gap:18px;margin-top:8px;font-size:12px;color:#64748b}
+.wel .row b{color:#0f172a;font-weight:600}
+.qtitle{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:13px;font-weight:700;color:#0f172a}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:640px){.qgrid{grid-template-columns:repeat(2,1fr)}.mes-side{width:150px}}
+.qt{background:#fff;border:1px solid #e6ecf5;border-radius:10px;padding:14px 10px;text-align:center;
+  cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.qt:hover{border-color:var(--mes-ac);box-shadow:0 8px 20px -12px rgba(15,23,42,.4);transform:translateY(-2px)}
+.qt svg{width:22px;height:22px;color:var(--mes-ac)}
+.qt span{font-size:12px;color:#334155}
+.mes-cols{display:grid;grid-template-columns:1.35fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:700px){.mes-cols{grid-template-columns:1fr}}
+.panel-box{background:#fff;border:1px solid #e6ecf5;border-radius:10px;padding:12px 14px}
+.panel-box h4{font-size:12.6px;font-weight:700;color:#0f172a;margin-bottom:8px}
+.notice{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed #eef2f7;cursor:pointer}
+.notice:last-child{border-bottom:0}
+.notice:hover .nt{color:var(--mes-ac)}
+.notice .barline{width:3px;border-radius:2px;background:var(--mes-ac);flex:none}
+.notice .nt{font-size:12.3px;color:#1e293b;font-weight:600;transition:color .18s}
+.notice .nd{font-size:11.6px;color:#94a3b8;margin-top:2px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;font-size:11px;color:#64748b;text-align:center}
+.cal .hd{color:#94a3b8;font-size:10.5px;padding:3px 0}
+.cal .d{padding:4px 0;border-radius:5px}
+.cal .d.on{background:color-mix(in srgb,var(--mes-ac) 18%,transparent);color:var(--mes-ac);font-weight:700}
+
+.m-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.m-head h3{font-size:15px;font-weight:700;color:#0f172a}
+.m-head p{font-size:11.8px;color:#94a3b8;margin-top:2px}
+.m-act{margin-left:auto;display:flex;gap:8px}
+.btn{font:inherit;font-size:12px;padding:6px 12px;border-radius:7px;border:1px solid #dbe3ee;
+  background:#fff;color:#334155;cursor:pointer;transition:.18s}
+.btn:hover{border-color:#c3cfe0;background:#f8fafc}
+.btn.pri{background:var(--mes-ac);border-color:var(--mes-ac);color:#fff}
+.btn.pri:hover{filter:brightness(1.06)}
+.m-filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.m-input{font-size:12px;color:#94a3b8;background:#fff;border:1px solid #e2e8f2;border-radius:7px;
+  padding:6px 11px;min-width:150px}
+.m-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;
+  box-shadow:0 0 0 1px #e6ecf5}
+.m-table th{font-size:11.6px;font-weight:600;color:#64748b;text-align:left;padding:10px 12px;
+  background:#f7fafd;border-bottom:1px solid #e9eef6}
+.m-table td{font-size:12.2px;color:#1e293b;padding:10px 12px;border-bottom:1px solid #f1f5f9}
+.m-table tr:last-child td{border-bottom:0}
+.m-table tbody tr{cursor:pointer;transition:background .16s}
+.m-table tbody tr:hover{background:#f8fbff}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px}
+.pill.ok{color:#0f8a5f;background:#e7f7f0}
+.pill.run{color:#1d6fd6;background:#e8f1fe}
+.pill.wait{color:#b4720c;background:#fdf3e2}
+.m-page{display:flex;justify-content:flex-end;gap:6px;margin-top:10px;font-size:11.6px;color:#94a3b8}
+.m-page span{padding:3px 8px;border:1px solid #e2e8f2;border-radius:6px;background:#fff;cursor:pointer}
+.m-page span.on{border-color:var(--mes-ac);color:var(--mes-ac)}
+
+/* --- HMDP 模拟界面 --- */
+.ai{display:flex;height:560px;background:#fbf8f2;color:#2b241c;font-size:13px;letter-spacing:0}
+.ai-rail{flex:none;width:252px;padding:14px;overflow:auto;background:#fffdf9;border-right:1px solid #efe6d7}
+.ai-rail h5{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a08e74;margin:0 0 8px}
+.ai-card{padding:10px 12px;border-radius:11px;border:1px solid #efe6d7;margin-bottom:8px;cursor:pointer;
+  background:#fff;transition:.2s}
+.ai-card:hover{transform:translateX(2px);border-color:#d9cbb4}
+.ai-card.on{background:#12473a;border-color:#12473a;color:#fff}
+.ai-card .sc{font-size:10px;color:#b39b78;letter-spacing:.1em}
+.ai-card.on .sc{color:#7fd8b6}
+.ai-card b{display:block;font-size:12.8px;margin:3px 0;font-weight:650}
+.ai-card small{font-size:11.2px;color:#8b7a62;line-height:1.5;display:block}
+.ai-card.on small{color:#c8e6da}
+.ai-main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:auto;padding:16px 18px}
+.ai-tabs{display:flex;gap:4px;margin-bottom:12px;flex:none}
+.ai-tab{font:inherit;font-size:12px;padding:6px 13px;border-radius:8px;border:1px solid #efe6d7;
+  background:#fff;color:#8b7a62;cursor:pointer;transition:.18s}
+.ai-tab:hover{color:#2b241c}
+.ai-tab.on{background:#12473a;border-color:#12473a;color:#fff}
+.ai-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ai-h h4{font-size:15px;font-weight:700;color:#1f1a14}
+.badge2{font-size:10px;letter-spacing:.1em;color:#b39b78;border:1px solid #e8dcc6;padding:2px 7px;border-radius:5px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11.5px;color:#8b7a62;margin-bottom:4px}
+.field .inp{width:100%;font-size:12.4px;color:#2b241c;background:#fffdf8;border:1px solid #e8dcc6;
+  border-radius:8px;padding:8px 11px;font-family:inherit;transition:border-color .18s,box-shadow .18s}
+.field .inp:focus{outline:none;border-color:#12473a;box-shadow:0 0 0 3px rgba(18,71,58,.10)}
+.field textarea.inp{min-height:56px;resize:vertical}
+.ai-run{display:flex;gap:8px;margin:4px 0 12px}
+.ai-btn{font:inherit;font-size:12.2px;padding:8px 16px;border-radius:8px;border:1px solid #12473a;
+  background:#12473a;color:#fff;cursor:pointer;transition:.18s}
+.ai-btn:hover{filter:brightness(1.12)}
+.ai-btn:disabled{opacity:.55;cursor:default;filter:none}
+.ai-btn.ghost{background:#fff;color:#8b7a62;border-color:#e8dcc6}
+.ai-out{background:#141210;border-radius:10px;padding:14px 16px;color:#e8e2d8;font-size:12.4px;
+  line-height:1.75;min-height:132px;white-space:pre-wrap;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ai-out .ph{color:#6b6257}
+.ai-out .cur{display:inline-block;width:7px;height:14px;background:#3ddc97;vertical-align:-2px;
+  animation:caret 1s steps(2) infinite}
+@keyframes caret{50%{opacity:0}}
+.shop-item{display:flex;gap:12px;padding:11px;border-radius:11px;border:1px solid #efe6d7;background:#fff;
+  margin-bottom:9px;cursor:pointer;transition:.2s}
+.shop-item:hover{border-color:#d9cbb4;transform:translateX(2px)}
+.shop-item.on{border-color:#12473a;box-shadow:inset 0 0 0 1px #12473a}
+.shop-thumb{width:54px;height:54px;border-radius:9px;flex:none;
+  background:linear-gradient(145deg,#f3e4c8,#e6c893);display:grid;place-items:center;
+  color:#a8874c;font-size:16px;font-weight:700}
+.shop-item b{font-size:13px;display:block;color:#1f1a14}
+.shop-item .meta{font-size:11.5px;color:#8b7a62;margin-top:2px}
+.stars{color:#e0a03a;font-size:11px;letter-spacing:1px}
+.shop-detail{background:#fff;border:1px solid #efe6d7;border-radius:11px;padding:14px;margin-top:12px}
+.shop-detail h5{font-size:13.5px;font-weight:700;color:#1f1a14}
+.shop-detail .kv{display:flex;gap:8px;font-size:12px;color:#8b7a62;margin-top:6px}
+.shop-detail .kv b{color:#2b241c;font-weight:600}
+.shop-detail .vt{display:inline-block;margin:8px 6px 0 0;font-size:11.5px;color:#12473a;
+  border:1px solid #cfe3da;background:#f0f7f3;padding:4px 10px;border-radius:999px}
+
+@media(max-width:820px){
+  .ai{flex-direction:column;height:auto}
+  .ai-rail{width:100%;display:flex;gap:8px;overflow-x:auto;border-right:0;
+    border-bottom:1px solid #efe6d7;padding:10px;align-items:stretch}
+  .ai-rail h5{display:none}
+  .ai-card{flex:none;width:186px;margin-bottom:0}
+  .ai-main{max-height:none;padding:14px}
+  .ai-out{min-height:100px}
+}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;transition-duration:.001ms!important}
 }
@@ -403,7 +580,19 @@ footer .sep{opacity:.4}
     <p class="lead">覆盖「计划 → 执行 → 采集 → 追溯 → 分析」全流程的 MES 平台。前端 30+ 业务模块，后端约 900 个 Java 文件，支撑缸体 / 缸盖装配、螺栓拧紧、气密性检漏、清洁度测试等关键环节。</p>
 
     <div class="block">
-      <div class="block-head"><span class="idx">A</span><h4>原生界面截图</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">A</span><h4>交互预览</h4><span class="rule"></span></div>
+      <div class="demo">
+        <div class="demo-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="addr">DA MES · 交互预览</span>
+          <span class="demo-tip">点击左侧菜单 / 快捷访问</span>
+        </div>
+        <div class="mes" data-mes="da" style="--mes-ac:#0d94b0"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="idx">B</span><h4>真实界面截图</h4><span class="rule"></span></div>
       <div class="shots">
         <div>
           <div class="shot">
@@ -423,7 +612,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">B</span><h4>技术栈</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">C</span><h4>技术栈</h4><span class="rule"></span></div>
       <div class="chips">
         <span class="chip">Vue 3 + Vite + TS</span><span class="chip">Element Plus + Pinia</span>
         <span class="chip">ECharts</span><span class="chip">@vue-flow</span><span class="chip">Monaco / Ace</span>
@@ -435,7 +624,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">C</span><h4>系统架构</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">D</span><h4>系统架构</h4><span class="rule"></span></div>
       <div class="arch">
         <div class="layer"><span class="lab">展示层</span>
           <span class="node key">Vue3 单页应用</span><span class="node">大屏看板</span><span class="node">工艺建模流程图</span><span class="node">移动端适配</span></div>
@@ -455,7 +644,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">D</span><h4>核心功能</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">E</span><h4>核心功能</h4><span class="rule"></span></div>
       <div class="feats">
         <div class="feat"><b>生产大屏可视化</b><p>ECharts 实时看板：今日产量、设备稼动率、一次合格率 FTT、无故障天数。</p></div>
         <div class="feat"><b>安灯（Andon）管理</b><p>异常呼叫、音柱提醒、设备故障率与类型占比分析。</p></div>
@@ -467,7 +656,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">E</span><h4>技术亮点</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">F</span><h4>技术亮点</h4><span class="rule"></span></div>
       <div class="points">
         <div class="point"><span class="num">01</span><div><b>多数据源统一架构</b><p>通过 Dynamic-Datasource 同时对接 MySQL（业务）、SQL Server（第三方 AMS）、Oracle（数采池），按需路由。</p></div></div>
         <div class="point"><span class="num">02</span><div><b>代码生成器提效</b><p>FreeMarker 模板一键生成 entity / mapper / service / controller 与前端 API。</p></div></div>
@@ -492,7 +681,19 @@ footer .sep{opacity:.4}
     <p class="lead">与 DA 共用同一套 MES 底座，针对零部件制造场景快速二次交付（后端约 700 个 Java 文件）。重点覆盖物料与料箱仓储（WMS）、激光打标数据采集、小时产量统计与翻新管理。</p>
 
     <div class="block">
-      <div class="block-head"><span class="idx">A</span><h4>原生界面截图</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">A</span><h4>交互预览</h4><span class="rule"></span></div>
+      <div class="demo">
+        <div class="demo-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="addr">HL MES · 交互预览</span>
+          <span class="demo-tip">点击左侧菜单 / 快捷访问</span>
+        </div>
+        <div class="mes" data-mes="hl" style="--mes-ac:#0f9d6d"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="idx">B</span><h4>真实界面截图</h4><span class="rule"></span></div>
       <div class="shots">
         <div>
           <div class="shot">
@@ -512,7 +713,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">B</span><h4>技术栈</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">C</span><h4>技术栈</h4><span class="rule"></span></div>
       <div class="chips">
         <span class="chip">Vue 3 + Vite + TS</span><span class="chip">Element Plus + Pinia</span>
         <span class="chip">ECharts</span><span class="chip">Spring Boot 2.7</span><span class="chip">MyBatis-Plus</span>
@@ -522,7 +723,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">C</span><h4>核心功能</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">D</span><h4>核心功能</h4><span class="rule"></span></div>
       <div class="feats">
         <div class="feat"><b>物料与料箱管理</b><p>物料基础信息、料箱全流程追踪：入库、库位、出库。</p></div>
         <div class="feat"><b>WMS 仓储</b><p>仓储与库位建模，与物料、翻新流程联动。</p></div>
@@ -534,7 +735,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">D</span><h4>技术亮点</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">E</span><h4>技术亮点</h4><span class="rule"></span></div>
       <div class="points">
         <div class="point"><span class="num">01</span><div><b>同一底座二次交付</b><p>基于通用 MES 框架按客户裁剪，删减冗余模块并新增 WMS / 激光 / 翻新，显著降低交付成本。</p></div></div>
         <div class="point"><span class="num">02</span><div><b>设备数据采集</b><p>OPC UA 与采集点管理打通激光打标等设备的实时数据链路。</p></div></div>
@@ -558,7 +759,19 @@ footer .sep{opacity:.4}
     <p class="lead">在开源「点评 / 本地生活」项目（店铺、优惠券、订单、秒杀、预约）基础上加入大模型能力：AI 技能中心、MCP Server，以及支持工具调用的流式智能客服。</p>
 
     <div class="block">
-      <div class="block-head"><span class="idx">A</span><h4>原生界面截图</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">A</span><h4>交互预览</h4><span class="rule"></span></div>
+      <div class="demo">
+        <div class="demo-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="addr">HMDP · 交互预览</span>
+          <span class="demo-tip">切换技能卡片 / 点生成试试</span>
+        </div>
+        <div class="ai" data-ai></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="idx">B</span><h4>真实界面截图</h4><span class="rule"></span></div>
       <div class="shots">
         <div>
           <div class="shot">
@@ -578,7 +791,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">B</span><h4>技术栈</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">C</span><h4>技术栈</h4><span class="rule"></span></div>
       <div class="chips">
         <span class="chip">Spring Boot 3.5 + JDK 17</span><span class="chip">MyBatis-Plus 3.5</span>
         <span class="chip">Redis + Redisson</span><span class="chip">LangChain4j 1.0</span>
@@ -588,7 +801,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">C</span><h4>系统架构</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">D</span><h4>系统架构</h4><span class="rule"></span></div>
       <div class="arch">
         <div class="layer"><span class="lab">客户端</span>
           <span class="node key">Nginx 静态前端</span><span class="node">移动端适配</span></div>
@@ -605,7 +818,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">D</span><h4>核心功能</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">E</span><h4>核心功能</h4><span class="rule"></span></div>
       <div class="feats">
         <div class="feat"><b>AI 技能中心</b><p>8 个内置技能（探店笔记、评价总结与回复、优惠券文案、店铺标签、经营日报、短视频脚本、活动方案），数据库存 prompt 模板，运行时渲染调用。</p></div>
         <div class="feat"><b>MCP Server</b><p>将店铺、优惠券、订单、预约与 AI 技能暴露为标准 MCP 工具（无状态同步 Server）。</p></div>
@@ -617,7 +830,7 @@ footer .sep{opacity:.4}
     </div>
 
     <div class="block">
-      <div class="block-head"><span class="idx">E</span><h4>技术亮点</h4><span class="rule"></span></div>
+      <div class="block-head"><span class="idx">F</span><h4>技术亮点</h4><span class="rule"></span></div>
       <div class="points">
         <div class="point"><span class="num">01</span><div><b>AI 技能可配置化</b><p>技能列表与 prompt 模板存数据库，支持启停与排序；带 Redis 限流（每分钟 20 次）与调用失败本地兜底。</p></div></div>
         <div class="point"><span class="num">02</span><div><b>MCP 标准化</b><p>业务能力通过 MCP 协议对外暴露，AI 与业务解耦，可被任意 MCP 客户端调用。</p></div></div>
@@ -713,6 +926,336 @@ footer .sep{opacity:.4}
   window.addEventListener('load', function () {
     moveIndicator(document.querySelector('.tab.active'));
   });
+})();
+</script>
+<script>
+/* ================= 交互预览 ================= */
+(function () {
+  var P = {
+    chart:'<path d="M4 19V5M4 19h16M8 15l3-4 3 3 4-6"/>',
+    gauge:'<circle cx="12" cy="12" r="9"/><path d="M12 12l4-3"/>',
+    cog:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>',
+    bell:'<path d="M18 16v-5a6 6 0 10-12 0v5l-2 2h16l-2-2z"/><path d="M10 21h4"/>',
+    box:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
+    doc:'<path d="M14 3H7v18h10V8l-3-5z"/><path d="M9 12h6M9 16h6"/>',
+    db:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3 3 7 3s7-1.3 7-3v-6"/>'
+  };
+  function svg(n) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + P[n] + '</svg>';
+  }
+
+  var MES = {
+    da: { brand: 'DA MES', short: 'DA', groups: [
+      { n: '生产管理', i: 'chart', items: ['生产计划', '缸体在线', '缸盖在线'] },
+      { n: '质量管理', i: 'gauge', items: ['质量检验', '返修管理', '质量门'] },
+      { n: '设备管理', i: 'cog',   items: ['设备台账', '机型维护', '故障记录'] },
+      { n: '安灯管理', i: 'bell',  items: ['安灯基础', '安灯记录'] },
+      { n: '基础数据', i: 'box',   items: ['物料管理', '条码规则', '工位管理'] },
+      { n: '报表中心', i: 'doc',   items: ['报表查询', '无故障天数'] }
+    ]},
+    hl: { brand: 'HL MES', short: 'HL', groups: [
+      { n: '生产管理', i: 'chart', items: ['生产计划', '缸体在线', '缸盖在线'] },
+      { n: '物料管理', i: 'box',   items: ['物料配置', '物料基础', '料箱管理'] },
+      { n: '设备管理', i: 'cog',   items: ['设备台账', '机型维护'] },
+      { n: '数据采集', i: 'db',    items: ['采集点管理', 'PLC 连接'] },
+      { n: '基础数据', i: 'bell',  items: ['条码规则', '公司基础'] },
+      { n: '报表中心', i: 'doc',   items: ['导出管理'] }
+    ]}
+  };
+
+  var STAT = [['已完成', 'ok'], ['生产中', 'run'], ['待处理', 'wait']];
+  var LINES = ['A 线 · 1 号工位', 'B 线 · 2 号工位', 'C 线 · 3 号工位', 'A 线 · 4 号工位', 'B 线 · 5 号工位'];
+  var PRE = ['WO', 'QC', 'EQ', 'MT'];
+
+  function hashOf(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 9973; return h; }
+
+  function rowsFor(name) {
+    var s = hashOf(name);
+    var out = [];
+    for (var i = 0; i < 5; i++) {
+      var h = (s + i * 37) % 251;
+      out.push({
+        code: PRE[h % 4] + '-2026-0' + (1 + h % 9) + '-' + (100 + i),
+        name: LINES[(h + i) % LINES.length],
+        st: STAT[(h + i * 3) % 3],
+        time: '03-1' + (2 + i) + ' ' + (8 + h % 10) + ':' + (10 + h % 49)
+      });
+    }
+    return out;
+  }
+
+  function renderMes(host) {
+    var key = host.getAttribute('data-mes');
+    var cfg = MES[key];
+    var flat = [];
+    cfg.groups.forEach(function (g, gi) {
+      g.items.forEach(function (n, ii) { flat.push({ gi: gi, ii: ii, n: n, g: g.n, ic: g.i }); });
+    });
+
+    host.innerHTML =
+      '<aside class="mes-side">' +
+        '<div class="mes-logo"><i>' + cfg.short + '</i>' + cfg.brand + '</div>' +
+        cfg.groups.map(function (g, gi) {
+          return '<div class="mg' + (gi === 0 ? ' open' : '') + '" data-g="' + gi + '" role="button" tabindex="0">' +
+                   svg(g.i) + '<span>' + g.n + '</span><span class="chev"></span></div>' +
+                 '<div class="sub' + (gi === 0 ? ' open' : '') + '" data-s="' + gi + '">' +
+                   g.items.map(function (n, ii) {
+                     return '<div class="mi" data-g="' + gi + '" data-i="' + ii + '">' + n + '</div>';
+                   }).join('') +
+                 '</div>';
+        }).join('') +
+      '</aside>' +
+      '<div class="mes-main">' +
+        '<div class="mes-top"><div class="mes-crumb" data-crumb><b>首页</b></div>' +
+          '<div class="mes-user"><span class="mes-ava">演</span>演示用户</div></div>' +
+        '<div class="mes-body" data-body></div>' +
+      '</div>';
+
+    var body = host.querySelector('[data-body]');
+    var crumb = host.querySelector('[data-crumb]');
+    var cur = null;
+
+    function home() {
+      cur = null;
+      host.querySelectorAll('.mi').forEach(function (e) { e.classList.remove('on'); });
+      crumb.innerHTML = '<b>首页</b>';
+      var d = new Date();
+      var hh = d.getHours();
+      var hi = hh < 6 ? '凌晨好' : hh < 12 ? '早上好' : hh < 14 ? '中午好' : hh < 18 ? '下午好' : '晚上好';
+      var t = d.toLocaleTimeString('zh-CN', { hour12: false });
+      var y = d.getFullYear(), m = d.getMonth(), today = d.getDate();
+      var first = new Date(y, m, 1).getDay(), days = new Date(y, m + 1, 0).getDate();
+      var cal = ['日','一','二','三','四','五','六'].map(function (x) { return '<span class="hd">' + x + '</span>'; }).join('');
+      for (var i = 0; i < first; i++) cal += '<span class="d"></span>';
+      for (var dd = 1; dd <= days; dd++) cal += '<span class="d' + (dd === today ? ' on' : '') + '">' + dd + '</span>';
+
+      body.innerHTML =
+        '<div class="wel"><h3>' + hi + '！演示用户，欢迎使用 ' + cfg.brand + ' 系统</h3>' +
+          '<div class="row"><span>当前用户：<b>演示用户</b></span><span>所属工号：<b>1</b></span>' +
+          '<span>当前时间：<b>' + t + '</b></span></div></div>' +
+        '<div class="qtitle">快捷访问</div>' +
+        '<div class="qgrid">' + flat.slice(0, 8).map(function (f) {
+          return '<div class="qt" data-g="' + f.gi + '" data-i="' + f.ii + '">' + svg(f.ic) + '<span>' + f.n + '</span></div>';
+        }).join('') + '</div>' +
+        '<div class="mes-cols">' +
+          '<div class="panel-box"><h4>系统公告（2 条）</h4>' +
+            '<div class="notice"><span class="barline"></span><div><div class="nt">关于本周生产计划调整的通知</div>' +
+              '<div class="nd">本周三夜班暂停，请各工位提前调整排产。</div></div></div>' +
+            '<div class="notice"><span class="barline" style="opacity:.55"></span><div><div class="nt">设备年度保养安排</div>' +
+              '<div class="nd">3 月末完成 A 线全部设备点检与保养。</div></div></div>' +
+          '</div>' +
+          '<div class="panel-box"><h4>' + y + ' 年 ' + (m + 1) + ' 月</h4><div class="cal">' + cal + '</div></div>' +
+        '</div>';
+
+      body.querySelectorAll('.qt').forEach(function (el) {
+        el.addEventListener('click', function () { open(+el.dataset.g, +el.dataset.i); });
+      });
+    }
+
+    function open(gi, ii) {
+      var g = cfg.groups[gi];
+      var name = g.items[ii];
+      var grpEl = host.querySelector('.mg[data-g="' + gi + '"]');
+      var subEl = host.querySelector('.sub[data-s="' + gi + '"]');
+      if (grpEl && !grpEl.classList.contains('open')) {
+        grpEl.classList.add('open'); subEl.classList.add('open');
+      }
+      host.querySelectorAll('.mi').forEach(function (e) {
+        e.classList.toggle('on', +e.dataset.g === gi && +e.dataset.i === ii);
+      });
+      cur = { gi: gi, ii: ii };
+      crumb.innerHTML = '<b>首页</b><span style="opacity:.45"> / </span>' + g.n + '<span style="opacity:.45"> / </span><b>' + name + '</b>';
+
+      var st = rowsFor(name);
+      body.innerHTML =
+        '<div class="m-head"><div><h3>' + name + '</h3><p>' + g.n + ' · 数据列表</p></div>' +
+          '<div class="m-act"><button class="btn">导出</button><button class="btn pri">新增</button></div></div>' +
+        '<div class="m-filter"><span class="m-input">请输入关键字</span>' +
+          '<span class="m-input">状态：全部</span><button class="btn pri">查询</button></div>' +
+        '<table class="m-table"><thead><tr><th>单据编号</th><th>位置 / 工位</th><th>状态</th><th>更新时间</th></tr></thead><tbody>' +
+          st.map(function (r) {
+            return '<tr><td>' + r.code + '</td><td>' + r.name + '</td>' +
+                   '<td><span class="pill ' + r.st[1] + '">' + r.st[0] + '</span></td><td>' + r.time + '</td></tr>';
+          }).join('') +
+        '</tbody></table>' +
+        '<div class="m-page"><span>上一页</span><span class="on">1</span><span>2</span><span>3</span><span>下一页</span></div>';
+    }
+
+    host.querySelectorAll('.mg').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var gi = +el.dataset.g;
+        var sub = host.querySelector('.sub[data-s="' + gi + '"]');
+        el.classList.toggle('open');
+        sub.classList.toggle('open');
+      });
+    });
+    host.querySelectorAll('.mi').forEach(function (el) {
+      el.addEventListener('click', function () { open(+el.dataset.g, +el.dataset.i); });
+    });
+    crumb.addEventListener('click', home);
+    home();
+  }
+
+  document.querySelectorAll('[data-mes]').forEach(renderMes);
+
+  /* ---------------- HMDP ---------------- */
+  var SKILLS = [
+    { c:'blog_draft', s:'用户', n:'AI写探店笔记', d:'根据店铺和关键词生成可编辑的探店笔记草稿。',
+      f:[['店铺名称','示例茶餐厅'],['体验关键词','招牌菜、环境、服务、人均'],['文风','真实、有烟火气']],
+      o:'【探店笔记】\n\n今天打卡了「示例茶餐厅」，整体体验围绕招牌菜、环境和服务展开。\n\n推荐理由：\n· 招牌菜出餐稳定，特色菜有记忆点\n· 环境适合拍照，桌面间距宽松\n· 人均 68 元，适合朋友小聚\n\n避坑提醒：\n· 晚市高峰需排队，建议提前到店\n· 部分套餐需两人起订' },
+    { c:'review_summary', s:'商家', n:'AI总结店铺评价', d:'将评价内容总结成优点、问题和适合人群。',
+      f:[['店铺名称','示例茶餐厅'],['评价原文','环境好，菜有点咸，服务及时']],
+      o:'评价摘要\n\n优势：\n· 环境舒适、适合拍照\n· 服务响应及时\n\n待优化：\n· 部分菜品口味偏咸，建议调整出品标准\n\n适合人群：\n· 朋友聚会、周末放松\n· 对拍照和环境有要求的客群' },
+    { c:'review_reply', s:'商家', n:'AI生成评价回复', d:'为好评或差评生成礼貌、可直接编辑的商家回复。',
+      f:[['店铺名称','示例茶餐厅'],['用户评价','环境不错，就是上菜有点慢'],['回复语气','真诚']],
+      o:'您好，非常感谢您的反馈，也抱歉让您等待。\n\n我们已记录出餐节奏的问题，会在高峰时段增加出品岗位并优化流程。\n\n期待您下次到店能有更好的体验。' },
+    { c:'coupon_copy', s:'商家', n:'AI生成优惠券文案', d:'生成优惠券标题、副标题和活动推广话术。',
+      f:[['店铺名称','示例茶餐厅'],['优惠力度','满 100 减 30'],['目标人群','情侣 / 朋友聚会']],
+      o:'券标题：双人套餐限时立减 30 元\n副标题：招牌菜组合，到店即享\n\n推广话术：\n周末不知道吃什么？双人套餐一次打卡招牌菜，到店立减 30 元，适合约会与小聚。' },
+    { c:'shop_tags', s:'商家', n:'AI提取店铺标签', d:'根据店铺信息提炼用于推荐和搜索的标签。',
+      f:[['店铺名称','示例茶餐厅'],['店铺描述','环境好，出片，人均 68，适合聚会']],
+      o:'推荐标签：\n高性价比 · 适合拍照 · 朋友聚会 · 招牌菜 · 环境舒适 · 周末可选 · 地铁附近 · 适合约会' },
+    { c:'merchant_daily_report', s:'商家', n:'AI生成经营日报', d:'把商家经营数据转换成日报摘要。',
+      f:[['店铺名称','示例茶餐厅'],['今日数据','客流 132，核销券 26 张，评分 4.8']],
+      o:'经营日报\n\n今日表现：\n· 客流 132 人，核销券 26 张，转化正常\n· 评分维持 4.8，口碑稳定\n\n风险提醒：\n· 晚市 18:30-19:30 排队较久\n\n明日建议：\n· 提前备货高峰菜品\n· 主推双人套餐券承接周末流量' },
+    { c:'short_video_script', s:'商家', n:'AI生成短视频脚本', d:'生成本地生活探店短视频脚本。',
+      f:[['店铺名称','示例茶餐厅'],['卖点','招牌菜、环境'],['视频时长','30 秒']],
+      o:'短视频脚本（30s）\n\n0-3s 门头特写，字幕：周末就吃这家\n3-11s 招牌菜出锅画面，口播：这一口是招牌\n11-20s 环境空镜，口播：环境宽松，适合聊天\n20-27s 两人用餐画面，口播：人均 68 吃得踏实\n27-30s 结尾引导：到店出示本条视频领小食' },
+    { c:'promotion_plan', s:'商家', n:'AI生成活动方案草稿', d:'生成可由商家确认后执行的活动方案草稿。',
+      f:[['店铺名称','示例茶餐厅'],['活动目标','提升周末客流'],['预算','3000 元']],
+      o:'活动方案草稿\n\n主题：周末双人套餐季\n\n步骤：\n1. 上线双人套餐券，限时限量\n2. 探店笔记 5 篇 + 短视频 2 条扩散\n3. 到店核销赠送小食，提升复购\n\n预算分配：券补贴 2000 元，内容 600 元，物料 400 元\n周期：3-5 天\n\n（本方案需商家确认后执行）' }
+  ];
+
+  var SHOPS = [
+    { n:'示例茶餐厅 · 一店', sc:4.8, area:'中心商圈', price:68, addr:'示例路 18 号', v:['双人套餐券', '下午茶 9 折'] },
+    { n:'示例小馆 · 二店',   sc:4.6, area:'东城',     price:55, addr:'示例街 6 号',  v:['单人套餐券'] },
+    { n:'示例咖啡 · 三店',   sc:4.7, area:'西城',     price:42, addr:'示例巷 3 号',  v:['买一赠一'] }
+  ];
+
+  function stars(v) {
+    var full = Math.round(v);
+    return '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(0, 5 - full);
+  }
+
+  function renderAi(host) {
+    var state = { skill: 0, view: 'skills', shop: 0, typing: false };
+
+    host.innerHTML =
+      '<aside class="ai-rail" data-rail></aside>' +
+      '<div class="ai-main">' +
+        '<div class="ai-tabs">' +
+          '<button class="ai-tab on" data-v="skills">AI 技能中心</button>' +
+          '<button class="ai-tab" data-v="shops">店铺列表</button>' +
+        '</div>' +
+        '<div data-view></div>' +
+      '</div>';
+
+    var rail = host.querySelector('[data-rail]');
+    var view = host.querySelector('[data-view]');
+
+    function paintRail() {
+      rail.innerHTML = '<h5>技能</h5>' + SKILLS.map(function (s, i) {
+        return '<div class="ai-card' + (i === state.skill && state.view === 'skills' ? ' on' : '') + '" data-k="' + i + '">' +
+                 '<span class="sc">' + s.s + '</span><b>' + s.n + '</b><small>' + s.d + '</small></div>';
+      }).join('');
+      rail.querySelectorAll('.ai-card').forEach(function (el) {
+        el.addEventListener('click', function () {
+          state.skill = +el.dataset.k;
+          state.view = 'skills';
+          paintRail(); paintView();
+        });
+      });
+    }
+
+    function paintView() {
+      host.querySelectorAll('.ai-tab').forEach(function (b) {
+        b.classList.toggle('on', b.dataset.v === state.view);
+      });
+      if (state.view === 'skills') paintSkills(); else paintShops();
+    }
+
+    function paintSkills() {
+      var s = SKILLS[state.skill];
+      view.innerHTML =
+        '<div class="ai-h"><h4>' + s.n + '</h4><span class="badge2">' + s.s + '</span></div>' +
+        s.f.map(function (x) {
+          return '<div class="field"><label>' + x[0] + '</label>' +
+                 '<input class="inp" value="' + x[1] + '"></div>';
+        }).join('') +
+        '<div class="ai-run"><button class="ai-btn" data-run>生成</button>' +
+          '<button class="ai-btn ghost" data-clear>清空</button></div>' +
+        '<div class="ai-out" data-out><span class="ph">生成结果会显示在这里…</span></div>';
+
+      var out = view.querySelector('[data-out]');
+      var btn = view.querySelector('[data-run]');
+      view.querySelector('[data-clear]').addEventListener('click', function () {
+        out.innerHTML = '<span class="ph">生成结果会显示在这里…</span>';
+      });
+      btn.addEventListener('click', function () {
+        if (state.typing) return;
+        state.typing = true; btn.disabled = true; btn.textContent = '生成中…';
+        out.innerHTML = '<span class="ph">正在调用大模型…</span>';
+        setTimeout(function () {
+          var txt = s.o, i = 0;
+          var timer = setInterval(function () {
+            i += 3;
+            out.innerHTML = esc(txt.slice(0, i)) + '<span class="cur"></span>';
+            if (i >= txt.length) {
+              clearInterval(timer);
+              out.innerHTML = esc(txt);
+              state.typing = false; btn.disabled = false; btn.textContent = '生成';
+            }
+          }, 16);
+        }, 520);
+      });
+    }
+
+    function paintShops() {
+      view.innerHTML =
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">' +
+          '<div>' + SHOPS.map(function (s, i) {
+            return '<div class="shop-item' + (i === state.shop ? ' on' : '') + '" data-s="' + i + '">' +
+                     '<div class="shop-thumb">' + s.n.slice(0, 1) + '</div>' +
+                     '<div><b>' + s.n + '</b><div class="meta"><span class="stars">' + stars(s.sc) + '</span> ' + s.sc.toFixed(1) + '</div>' +
+                     '<div class="meta">' + s.area + ' · 人均 ￥' + s.price + '</div></div></div>';
+          }).join('') + '</div>' +
+          '<div data-sd></div>' +
+        '</div>';
+
+      var sd = view.querySelector('[data-sd]');
+      function paintDetail() {
+        var s = SHOPS[state.shop];
+        sd.innerHTML = '<div class="shop-detail"><h5>' + s.n + '</h5>' +
+          '<div class="kv"><b>评分</b><span class="stars">' + stars(s.sc) + '</span>' + s.sc.toFixed(1) + '</div>' +
+          '<div class="kv"><b>商圈</b>' + s.area + '</div>' +
+          '<div class="kv"><b>人均</b>￥' + s.price + '</div>' +
+          '<div class="kv"><b>地址</b>' + s.addr + '</div>' +
+          '<div>' + s.v.map(function (t) { return '<span class="vt">' + t + '</span>'; }).join('') + '</div>' +
+          '<div class="kv" style="margin-top:10px;color:#a08e74">点击左侧其它店铺可切换查看</div></div>';
+      }
+      view.querySelectorAll('.shop-item').forEach(function (el) {
+        el.addEventListener('click', function () {
+          state.shop = +el.dataset.s;
+          view.querySelectorAll('.shop-item').forEach(function (x) { x.classList.remove('on'); });
+          el.classList.add('on');
+          paintDetail();
+        });
+      });
+      paintDetail();
+    }
+
+    host.querySelectorAll('.ai-tab').forEach(function (b) {
+      b.addEventListener('click', function () { state.view = b.dataset.v; paintRail(); paintView(); });
+    });
+
+    paintRail(); paintView();
+  }
+
+  function esc(t) {
+    return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  document.querySelectorAll('[data-ai]').forEach(renderAi);
 })();
 </script>
 </body>
