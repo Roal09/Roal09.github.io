@@ -2,8 +2,8 @@
 
 const PROJECTS = {
   da: {
-    number: '01', code: 'DA', title: '发动机装配 MES', english: 'Manufacturing / Engine Assembly',
-    category: '发动机制造', position: '制造执行与质量追溯', origin: '企业项目 · 代号 DA',
+    number: '01', code: 'A', title: '发动机装配 MES', english: 'Manufacturing / Engine Assembly',
+    category: '发动机制造', position: '制造执行与质量追溯', origin: '企业项目 · 代号 A',
     summary: '面向发动机装配场景，覆盖安灯异常、质量门校验、工艺配置与生产统计，并整合多源装配数据，连接现场执行与质量追溯。',
     image: 'assets/da-preview.jpg', demo: 'mes/demo.html', next: 'hl',
     scenes: [
@@ -24,8 +24,8 @@ const PROJECTS = {
     boundary: '列表筛选、编辑、删除与导出仅作用于本次演示数据，刷新页面后恢复，不连接生产系统。工艺配置与可视化规则编辑为不同模块，WebSocket 用于会话通知。'
   },
   hl: {
-    number: '02', code: 'HL', title: '零部件制造 MES', english: 'Manufacturing / System Integration',
-    category: '零部件制造', position: '生产执行与现场集成', origin: '企业项目 · 代号 HL',
+    number: '02', code: 'B', title: '零部件制造 MES', english: 'Manufacturing / System Integration',
+    category: '零部件制造', position: '生产执行与现场集成', origin: '企业项目 · 代号 B',
     summary: '面向零部件制造场景，围绕生产计划、物料与料箱组织业务，对接外部仓储和激光打标设备，并提供小时产量统计与质量管理。',
     image: 'assets/hl-preview.jpg', demo: 'mes/demo-hl.html', next: 'hmdp',
     scenes: [
